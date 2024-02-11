@@ -43,6 +43,7 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/leveldb" TYPE FILE FILES
+    "/home/wojtek/Work/MyLevelDB/leveldb/include/leveldb/bloom_valueWM.h"
     "/home/wojtek/Work/MyLevelDB/leveldb/include/leveldb/c.h"
     "/home/wojtek/Work/MyLevelDB/leveldb/include/leveldb/cache.h"
     "/home/wojtek/Work/MyLevelDB/leveldb/include/leveldb/comparator.h"

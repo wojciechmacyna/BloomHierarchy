@@ -7,6 +7,12 @@
 #IncludeRegexTransform: 
 
 ../db/db_impl.h
+db/dbformat.h
+../db/db/dbformat.h
+db/log_writer.h
+../db/db/log_writer.h
+db/snapshot.h
+../db/db/snapshot.h
 atomic
 -
 deque
@@ -15,12 +21,6 @@ set
 -
 string
 -
-db/dbformat.h
-../db/db/dbformat.h
-db/log_writer.h
-../db/db/log_writer.h
-db/snapshot.h
-../db/db/snapshot.h
 leveldb/db.h
 ../db/leveldb/db.h
 leveldb/env.h

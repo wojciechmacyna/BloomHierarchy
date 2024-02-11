@@ -9,7 +9,7 @@ C_DEFINES = -DLEVELDB_PLATFORM_POSIX=1
 
 C_INCLUDES = -I/home/wojtek/Work/MyLevelDB/leveldb/build/include -I/home/wojtek/Work/MyLevelDB/leveldb/. -I/home/wojtek/Work/MyLevelDB/leveldb/include -isystem /home/wojtek/Work/MyLevelDB/leveldb/third_party/googletest/googlemock/include -isystem /home/wojtek/Work/MyLevelDB/leveldb/third_party/googletest/googlemock -isystem /home/wojtek/Work/MyLevelDB/leveldb/third_party/googletest/googletest/include -isystem /home/wojtek/Work/MyLevelDB/leveldb/third_party/googletest/googletest 
 
-CXX_FLAGS =  -fno-exceptions -fno-rtti -O3 -DNDEBUG   -pthread -std=c++11
+CXX_FLAGS =  -fno-rtti -O3 -DNDEBUG   -pthread -std=c++11
 
 CXX_DEFINES = -DLEVELDB_PLATFORM_POSIX=1
 

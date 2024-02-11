@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/leveldb.dir/db/bloom_valueWM.cc.o"
   "CMakeFiles/leveldb.dir/db/builder.cc.o"
   "CMakeFiles/leveldb.dir/db/c.cc.o"
   "CMakeFiles/leveldb.dir/db/db_impl.cc.o"
