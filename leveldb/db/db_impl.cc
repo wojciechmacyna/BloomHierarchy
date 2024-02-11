@@ -4,14 +4,6 @@
 
 #include "db/db_impl.h"
 
-#include <algorithm>
-#include <atomic>
-#include <cstdint>
-#include <cstdio>
-#include <set>
-#include <string>
-#include <vector>
-
 #include "db/builder.h"
 #include "db/db_iter.h"
 #include "db/dbformat.h"
@@ -22,11 +14,21 @@
 #include "db/table_cache.h"
 #include "db/version_set.h"
 #include "db/write_batch_internal.h"
+#include <algorithm>
+#include <atomic>
+#include <cstdint>
+#include <cstdio>
+#include <set>
+#include <string>
+#include <vector>
+
+
 #include "leveldb/db.h"
 #include "leveldb/env.h"
 #include "leveldb/status.h"
 #include "leveldb/table.h"
 #include "leveldb/table_builder.h"
+
 #include "port/port.h"
 #include "table/block.h"
 #include "table/merger.h"
@@ -34,6 +36,8 @@
 #include "util/coding.h"
 #include "util/logging.h"
 #include "util/mutexlock.h"
+
+#include "leveldb/bloom_valueWM.h"
 
 namespace leveldb {
 
@@ -283,6 +287,21 @@ void DBImpl::RemoveObsoleteFiles() {
   // have unique names which will not collide with newly created files and
   // are therefore safe to delete while allowing other threads to proceed.
   mutex_.Unlock();
+
+  // WM added, removing bloom files
+  for (const std::string& filename : files_to_delete) {
+    std::string tail =
+        filename.substr(filename.length() - 4, filename.length());
+    if (tail == ".ldb") {
+      std::string s = filename.substr(0, filename.length() - 4);
+      int g = stoi(s);
+      std::string sf = std::to_string(g) + ".bloom";
+      env_->RemoveFile(dbname_ + "/" + sf);
+    }
+  }
+
+  // WM end
+
   for (const std::string& filename : files_to_delete) {
     env_->RemoveFile(dbname_ + "/" + filename);
   }
@@ -747,6 +766,7 @@ void DBImpl::BackgroundCompaction() {
         status.ToString().c_str(), versions_->LevelSummary(&tmp));
   } else {
     CompactionState* compact = new CompactionState(c);
+
     status = DoCompactionWork(compact);
     if (!status.ok()) {
       RecordBackgroundError(status);
@@ -804,6 +824,7 @@ Status DBImpl::OpenCompactionOutputFile(CompactionState* compact) {
   {
     mutex_.Lock();
     file_number = versions_->NewFileNumber();
+    file_numberForBloom = file_number;
     pending_outputs_.insert(file_number);
     CompactionState::Output out;
     out.number = file_number;
@@ -918,6 +939,13 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   std::string current_user_key;
   bool has_current_user_key = false;
   SequenceNumber last_sequence_for_key = kMaxSequenceNumber;
+
+  // WM : added
+  bloom_valueWM* filter;
+  std::string bloom_file;
+
+  // WM : end
+
   while (input->Valid() && !shutting_down_.load(std::memory_order_acquire)) {
     // Prioritize immutable compaction work
     if (has_imm_.load(std::memory_order_relaxed)) {
@@ -990,6 +1018,15 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       // Open output file if necessary
       if (compact->builder == nullptr) {
         status = OpenCompactionOutputFile(compact);
+
+        // WM : added
+        bloom_file =
+            dbname_ + "/" + std::to_string(file_numberForBloom) + ".bloom";
+        filter = new bloom_valueWM();
+        filter->createFile(bloom_file);
+
+        // WM : end
+
         if (!status.ok()) {
           break;
         }
@@ -1000,10 +1037,23 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       compact->current_output()->largest.DecodeFrom(key);
       compact->builder->Add(key, input->value());
 
+      // WM : added
+      std::string val = input->value().ToString();
+      if (val == "Value187719") {
+        std::cout << "Value" << val << std::endl;
+      }
+      // std::cout << "Value" << val << std::endl;
+      filter->insert(input->value().ToString());
+      // WM : end
+
       // Close output file if it is big enough
       if (compact->builder->FileSize() >=
           compact->compaction->MaxOutputFileSize()) {
         status = FinishCompactionOutputFile(compact, input);
+
+        // WM : added
+        filter->saveToFile(bloom_file);
+        // WM : end
         if (!status.ok()) {
           break;
         }
@@ -1368,22 +1418,8 @@ Status DBImpl::MakeRoomForWrite(bool force) {
         versions_->ReuseFileNumber(new_log_number);
         break;
       }
-
       delete log_;
-
-      s = logfile_->Close();
-      if (!s.ok()) {
-        // We may have lost some data written to the previous log file.
-        // Switch to the new log file anyway, but record as a background
-        // error so we do not attempt any more writes.
-        //
-        // We could perhaps attempt to save the memtable corresponding
-        // to log file and suppress the error if that works, but that
-        // would add more complexity in a critical code path.
-        RecordBackgroundError(s);
-      }
       delete logfile_;
-
       logfile_ = lfile;
       logfile_number_ = new_log_number;
       log_ = new log::Writer(lfile);

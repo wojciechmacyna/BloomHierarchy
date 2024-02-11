@@ -69,8 +69,8 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   endif(NOT CMAKE_C_FLAGS MATCHES "-Wstrict-prototypes")
 
   # Disable C++ exceptions.
-  string(REGEX REPLACE "-fexceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+  #string(REGEX REPLACE "-fexceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
 
   # Disable RTTI.
   string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -121,6 +121,7 @@ add_library(leveldb "")
 target_sources(leveldb
   PRIVATE
     "${PROJECT_BINARY_DIR}/${LEVELDB_PORT_CONFIG_DIR}/port_config.h"
+    "db/bloom_valueWM.cc"
     "db/builder.cc"
     "db/builder.h"
     "db/c.cc"
@@ -193,6 +194,7 @@ target_sources(leveldb
 
   # Only CMake 3.3+ supports PUBLIC sources in targets exported by "install".
   $<$<VERSION_GREATER:CMAKE_VERSION,3.2>:PUBLIC>
+    "${LEVELDB_PUBLIC_INCLUDE_DIR}/bloom_valueWM.h"
     "${LEVELDB_PUBLIC_INCLUDE_DIR}/c.h"
     "${LEVELDB_PUBLIC_INCLUDE_DIR}/cache.h"
     "${LEVELDB_PUBLIC_INCLUDE_DIR}/comparator.h"
@@ -265,7 +267,7 @@ endif(BUILD_SHARED_LIBS)
 if(HAVE_CLANG_THREAD_SAFETY)
   target_compile_options(leveldb
     PUBLIC
-      -Werror -Wthread-safety)
+      -Werror -Wthread-safety )
 endif(HAVE_CLANG_THREAD_SAFETY)
 
 if(HAVE_CRC32C)
@@ -477,6 +479,7 @@ if(LEVELDB_INSTALL)
   )
   install(
     FILES
+      "${LEVELDB_PUBLIC_INCLUDE_DIR}/bloom_valueWM.h"
       "${LEVELDB_PUBLIC_INCLUDE_DIR}/c.h"
       "${LEVELDB_PUBLIC_INCLUDE_DIR}/cache.h"
       "${LEVELDB_PUBLIC_INCLUDE_DIR}/comparator.h"

@@ -377,6 +377,33 @@ db/autocompact_test.cc.s:
 	$(MAKE) -f CMakeFiles/leveldb_tests.dir/build.make CMakeFiles/leveldb_tests.dir/db/autocompact_test.cc.s
 .PHONY : db/autocompact_test.cc.s
 
+db/bloom_valueWM.o: db/bloom_valueWM.cc.o
+
+.PHONY : db/bloom_valueWM.o
+
+# target to build an object file
+db/bloom_valueWM.cc.o:
+	$(MAKE) -f CMakeFiles/leveldb.dir/build.make CMakeFiles/leveldb.dir/db/bloom_valueWM.cc.o
+.PHONY : db/bloom_valueWM.cc.o
+
+db/bloom_valueWM.i: db/bloom_valueWM.cc.i
+
+.PHONY : db/bloom_valueWM.i
+
+# target to preprocess a source file
+db/bloom_valueWM.cc.i:
+	$(MAKE) -f CMakeFiles/leveldb.dir/build.make CMakeFiles/leveldb.dir/db/bloom_valueWM.cc.i
+.PHONY : db/bloom_valueWM.cc.i
+
+db/bloom_valueWM.s: db/bloom_valueWM.cc.s
+
+.PHONY : db/bloom_valueWM.s
+
+# target to generate assembly for a file
+db/bloom_valueWM.cc.s:
+	$(MAKE) -f CMakeFiles/leveldb.dir/build.make CMakeFiles/leveldb.dir/db/bloom_valueWM.cc.s
+.PHONY : db/bloom_valueWM.cc.s
+
 db/builder.o: db/builder.cc.o
 
 .PHONY : db/builder.o
@@ -2172,6 +2199,9 @@ help:
 	@echo "... db/autocompact_test.o"
 	@echo "... db/autocompact_test.i"
 	@echo "... db/autocompact_test.s"
+	@echo "... db/bloom_valueWM.o"
+	@echo "... db/bloom_valueWM.i"
+	@echo "... db/bloom_valueWM.s"
 	@echo "... db/builder.o"
 	@echo "... db/builder.i"
 	@echo "... db/builder.s"
