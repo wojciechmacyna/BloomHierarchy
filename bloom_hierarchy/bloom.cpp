@@ -65,7 +65,7 @@ void FullIndexCreation() {
 
 void DbCreation() {
     const int num = 1;
-    const int num1 = 1000000;
+    const int num1 = 50000000;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
