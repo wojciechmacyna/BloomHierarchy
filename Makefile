@@ -20,7 +20,7 @@ HDRS := $(wildcard $(INC_DIR)/*.hpp)
 all: mybloom
 mybloom : $(SRC_DIR)/bloom.cpp
 	$(CC) $(SRC_DIR)/bloom.cpp $(SRC_DIR)/dbDumper.cpp $(SRC_DIR)/bloom_value.cpp $(C_FLAGS) $(LIBS) -o $(OUT_DIR)/main $(INCLUDE) $(LIB_PATH)
-
+ #   $(CC) $(SRCS) $(C_FLAGS) $(LIBS) -o $(OUT_DIR)/main $(INCLUDE) $(LIB_PATH)
 
 #all:
 #	@$(MAKE) app --no-print-directory

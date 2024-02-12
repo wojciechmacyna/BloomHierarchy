@@ -72,7 +72,7 @@ void DbCreation() {
     leveldb::DB* db;
     leveldb::Options options;
     options.create_if_missing = true;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(10);
+   // options.filter_policy = leveldb::NewBloomFilterPolicy(10);
 
     leveldb::Status status = leveldb::DB::Open(options, dbname, &db);
     assert(status.ok());
@@ -162,28 +162,82 @@ std::vector<std::string> listFilesWithExtension(const std::string& directory, co
 }
 
 
-void NumberCreation(){
-    std::string str1 = "0089.ldb";
+std::string transformFileName(std::string filename, std::string from, std::string to){
+
+    std::string  s = filename.substr(0, filename.length() - from.length());
+    s = s + to;
+    return s;
+}
 
 
-    std::string  tail = str1.substr(str1.length() - 4, str1.length());
-    if (tail==".ldb"){
-        std::string  s = str1.substr(0, str1.length() - 4);
-        int g = stoi(s);
-        std::string  sf = std::to_string(g) + ".bloom";
-        std::cout << sf << std::endl;
+void RetrieveFromSStable(std::string file, std::string find_value){
+ 
+    const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);
+
+    for(DBRecord r : ssTableRecords)
+    {           
+             std::string newValue = r.valData;
+             if (newValue==find_value){
+                std::cout << "Exists in SSTable : " + file << std::endl;
+             }
+    }    
+
+}
+
+void ScanningWithoutBloom(std::string valuetofind) {
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".ldb";
+
+    std::vector<std::string> files = listFilesWithExtension(directory, extension);
+    for (const auto& file : files) {
+
+        std::string filePath = file;
+        RetrieveFromSStable(file, valuetofind);              
+
     }
-    else{
-         std::cout << "Bad" << std::endl;
+
+    
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout << "Scanning without bloom (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
+
+}
+
+
+
+void ScanningWithBloom(std::string valuetofind) {
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".bloom";
+
+    std::vector<std::string> files = listFilesWithExtension(directory, extension);
+    for (const auto& file : files) {
+        
+        std::string filePath = file;
+        bloom_value filter = filter.loadFromFile(filePath);
+        
+        if (filter.exists(valuetofind)) {
+            std::cout << "Exists in bloom file : " + file << std::endl;
+            std::string datafile = transformFileName(file, ".bloom", ".ldb");
+            RetrieveFromSStable(datafile, valuetofind);
+        }      
     }
+
+    
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::cout << "Scanning with bloom  (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
+
 }
 
 void CreateBloomValue(){
 
     bloom_value *filter;
     std::string bloom_file;
-    int i=0;
-
 
     std::string directory = "../out/" + dbname;
     std::string extension = ".ldb";
@@ -191,13 +245,11 @@ void CreateBloomValue(){
 
     std::cout << "Files with extension " << extension << " in directory " << directory << ":" << std::endl;
     for (const std::string & file : files) {
-        std::cout << file << std::endl;
-        bloom_file = "../out/" + dbname + "/" + std::to_string(i++) + ".bloom";
+        //std::cout << file << std::endl;
+        bloom_file = transformFileName(file, ".ldb", ".bloom");
         filter = new bloom_value();
         filter->createFile(bloom_file); 
         const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);
-
-        std::cout << ssTableRecords.size() << std::endl;
 
         for(DBRecord r : ssTableRecords)
         {           
@@ -211,9 +263,13 @@ void CreateBloomValue(){
 int main()
 {
 
-DbCreation();
-CreateBloomValue();
-    
+    DbCreation();
+    CreateBloomValue();
+
+    std::string valuetofind = "Value187719";
+    ScanningWithBloom(valuetofind);   
+
+   ScanningWithoutBloom(valuetofind);   
 
     //const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(ssTable);
      //std::vector<std::vector<std::string>> ssTables = DBDumper::getSSTableFiles(primaryIndex->getLevelDbPtr(), primaryIndex->getIndexFolder());

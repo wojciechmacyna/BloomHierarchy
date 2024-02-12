@@ -9,7 +9,7 @@
 class bloom_value {
  private:
 
-  std::bitset<50000> bitArray;  // Example size
+  std::bitset<2000000> bitArray;  // Example size
   int numHashFunctions=3;
 
  public:
