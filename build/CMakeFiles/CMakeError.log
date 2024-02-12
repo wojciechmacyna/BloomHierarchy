@@ -1,0 +1,200 @@
+Determining if the function crc32c_value exists in the crc32c failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_2da03 && [1/2] Building C object CMakeFiles/cmTC_2da03.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_2da03
+FAILED: cmTC_2da03 
+: && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=crc32c_value   CMakeFiles/cmTC_2da03.dir/CheckFunctionExists.c.o  -o cmTC_2da03  -lcrc32c && :
+/usr/bin/ld: cannot find -lcrc32c
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function snappy_compress exists in the snappy failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_60f48 && [1/2] Building C object CMakeFiles/cmTC_60f48.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_60f48
+FAILED: cmTC_60f48 
+: && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=snappy_compress   CMakeFiles/cmTC_60f48.dir/CheckFunctionExists.c.o  -o cmTC_60f48  -lsnappy && :
+/usr/bin/ld: cannot find -lsnappy
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function zstd_compress exists in the zstd failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_c60fd && [1/2] Building C object CMakeFiles/cmTC_c60fd.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_c60fd
+FAILED: cmTC_c60fd 
+: && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=zstd_compress   CMakeFiles/cmTC_c60fd.dir/CheckFunctionExists.c.o  -o cmTC_c60fd  -lzstd && :
+/usr/bin/ld: cannot find -lzstd
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function malloc exists in the tcmalloc failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_fa70a && [1/2] Building C object CMakeFiles/cmTC_fa70a.dir/CheckFunctionExists.c.o
+/usr/share/cmake-3.16/Modules/CheckFunctionExists.c:7:3: warning: incompatible redeclaration of library function 'malloc' [-Wincompatible-library-redeclaration]
+  CHECK_FUNCTION_EXISTS(void);
+  ^
+<command line>:1:31: note: expanded from here
+#define CHECK_FUNCTION_EXISTS malloc
+                              ^
+/usr/share/cmake-3.16/Modules/CheckFunctionExists.c:7:3: note: 'malloc' is a builtin with type 'void *(unsigned long)'
+<command line>:1:31: note: expanded from here
+#define CHECK_FUNCTION_EXISTS malloc
+                              ^
+1 warning generated.
+[2/2] Linking C executable cmTC_fa70a
+FAILED: cmTC_fa70a 
+: && /usr/bin/clang -DCHECK_FUNCTION_EXISTS=malloc   CMakeFiles/cmTC_fa70a.dir/CheckFunctionExists.c.o  -o cmTC_fa70a  -ltcmalloc && :
+/usr/bin/ld: cannot find -ltcmalloc
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the F_FULLFSYNC exist failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_6c44a && [1/2] Building CXX object CMakeFiles/cmTC_6c44a.dir/CheckSymbolExists.cxx.o
+FAILED: CMakeFiles/cmTC_6c44a.dir/CheckSymbolExists.cxx.o 
+/usr/bin/clang++    -std=c++11 -o CMakeFiles/cmTC_6c44a.dir/CheckSymbolExists.cxx.o -c CheckSymbolExists.cxx
+CheckSymbolExists.cxx:8:19: error: use of undeclared identifier 'F_FULLFSYNC'
+  return ((int*)(&F_FULLFSYNC))[argc];
+                  ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+File /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <fcntl.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef F_FULLFSYNC
+  return ((int*)(&F_FULLFSYNC))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_ecf75 && [1/2] Building C object CMakeFiles/cmTC_ecf75.dir/src.c.o
+[2/2] Linking C executable cmTC_ecf75
+FAILED: cmTC_ecf75 
+: && /usr/bin/clang -Wstrict-prototypes -DCMAKE_HAVE_LIBC_PTHREAD   CMakeFiles/cmTC_ecf75.dir/src.c.o  -o cmTC_ecf75   && :
+/usr/bin/ld: CMakeFiles/cmTC_ecf75.dir/src.c.o: in function `main':
+src.c:(.text+0x35): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x41): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x53): undefined reference to `pthread_join'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_56b52 && [1/2] Building C object CMakeFiles/cmTC_56b52.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_56b52
+FAILED: cmTC_56b52 
+: && /usr/bin/clang -Wstrict-prototypes -DCHECK_FUNCTION_EXISTS=pthread_create   CMakeFiles/cmTC_56b52.dir/CheckFunctionExists.c.o  -o cmTC_56b52  -lpthreads && :
+/usr/bin/ld: cannot find -lpthreads
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Performing C++ SOURCE FILE Test HAVE_CXX_FLAG_WSUGGEST_OVERRIDE failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_d3535 && [1/2] Building CXX object CMakeFiles/cmTC_d3535.dir/src.cxx.o
+FAILED: CMakeFiles/cmTC_d3535.dir/src.cxx.o 
+/usr/bin/clang++    -fno-rtti  -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Werror -DHAVE_CXX_FLAG_WSUGGEST_OVERRIDE  -Wsuggest-override   -Wsuggest-override -std=c++11 -o CMakeFiles/cmTC_d3535.dir/src.cxx.o -c src.cxx
+error: unknown warning option '-Wsuggest-override'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wsuggest-override'; did you mean '-Wshift-overflow'? [-Werror,-Wunknown-warning-option]
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test HAVE_CXX_FLAG_WD654 failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_c73ff && [1/2] Building CXX object CMakeFiles/cmTC_c73ff.dir/src.cxx.o
+FAILED: CMakeFiles/cmTC_c73ff.dir/src.cxx.o 
+/usr/bin/clang++    -fno-rtti  -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Werror  -pedantic  -pedantic-errors  -Wshorten-64-to-32  -fstrict-aliasing  -Wno-deprecated-declarations  -Wno-deprecated  -fno-exceptions  -Wstrict-aliasing -DHAVE_CXX_FLAG_WD654  -wd654   -wd654 -std=c++11 -o CMakeFiles/cmTC_c73ff.dir/src.cxx.o -c src.cxx
+clang: error: unknown argument: '-wd654'
+clang: error: unknown argument: '-wd654'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main() { return 0; }
+Determining if the function sqlite3_open exists in the sqlite3 failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_a13c0 && [1/2] Building C object CMakeFiles/cmTC_a13c0.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTC_a13c0
+FAILED: cmTC_a13c0 
+: && /usr/bin/clang -Wstrict-prototypes -DCHECK_FUNCTION_EXISTS=sqlite3_open   CMakeFiles/cmTC_a13c0.dir/CheckFunctionExists.c.o  -o cmTC_a13c0  -lsqlite3 && :
+/usr/bin/ld: cannot find -lsqlite3
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Performing C++ SOURCE FILE Test HAVE_KYOTOCABINET failed with the following output:
+Change Dir: /home/wojtek/Work/MyLevelDB/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_063b9 && [1/2] Building CXX object CMakeFiles/cmTC_063b9.dir/src.cxx.o
+FAILED: CMakeFiles/cmTC_063b9.dir/src.cxx.o 
+/usr/bin/clang++    -fno-rtti -DHAVE_KYOTOCABINET   -std=c++11 -o CMakeFiles/cmTC_063b9.dir/src.cxx.o -c src.cxx
+src.cxx:2:10: fatal error: 'kcpolydb.h' file not found
+#include <kcpolydb.h>
+         ^~~~~~~~~~~~
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+
+#include <kcpolydb.h>
+
+int main() {
+  kyotocabinet::TreeDB* db = new kyotocabinet::TreeDB();
+  delete db;
+  return 0;
+}
+  

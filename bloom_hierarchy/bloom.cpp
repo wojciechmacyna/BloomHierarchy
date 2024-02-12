@@ -11,18 +11,19 @@
 #include <string>
 #include <vector>
 
-
-
+#include <dirent.h>
 
 #include "leveldb/db.h"
 #include "leveldb/filter_policy.h"
 #include "leveldb/bloom_valueWM.h"
 
-
+#include "dbDumper.hpp"
+#include "bloom_value.hpp"
 
 
 std::string dbname = "BigDB100mln";
-std::string dbnameDest = "BigDB100mlnDest";
+std::string dbnameDest = "BigDB100mlnvvvv";
+
 
 static const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -117,13 +118,6 @@ void RetrieveData() {
 
 
 
-
-
-
-
-
-
-
 void Statistics() {
 
     leveldb::DB* db;
@@ -146,17 +140,92 @@ void Statistics() {
 }
 
 
+// Function to list all files in a directory with a given extension
+std::vector<std::string> listFilesWithExtension(const std::string& directory, const std::string& extension) {
+    std::vector<std::string> files;
+
+    DIR* dir;
+    struct dirent* ent;
+    if ((dir = opendir(directory.c_str())) != nullptr) {
+        while ((ent = readdir(dir)) != nullptr) {
+            std::string filename = ent->d_name;
+            if (filename.length() >= extension.length() && filename.compare(filename.length() - extension.length(), extension.length(), extension) == 0) {
+                files.push_back(directory + "/" + filename);
+            }
+        }
+        closedir(dir);
+    } else {
+        std::cerr << "Error opening directory" << std::endl;
+    }
+
+    return files;
+}
+
+
+void NumberCreation(){
+    std::string str1 = "0089.ldb";
+
+
+    std::string  tail = str1.substr(str1.length() - 4, str1.length());
+    if (tail==".ldb"){
+        std::string  s = str1.substr(0, str1.length() - 4);
+        int g = stoi(s);
+        std::string  sf = std::to_string(g) + ".bloom";
+        std::cout << sf << std::endl;
+    }
+    else{
+         std::cout << "Bad" << std::endl;
+    }
+}
+
+void CreateBloomValue(){
+
+    bloom_value *filter;
+    std::string bloom_file;
+    int i=0;
+
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".ldb";
+    std::vector<std::string> files = listFilesWithExtension(directory, extension);
+
+    std::cout << "Files with extension " << extension << " in directory " << directory << ":" << std::endl;
+    for (const std::string & file : files) {
+        std::cout << file << std::endl;
+        bloom_file = "../out/" + dbname + "/" + std::to_string(i++) + ".bloom";
+        filter = new bloom_value();
+        filter->createFile(bloom_file); 
+        const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);
+
+        std::cout << ssTableRecords.size() << std::endl;
+
+        for(DBRecord r : ssTableRecords)
+        {           
+             std::string newValue = r.valData;
+             filter->insert(newValue);
+        }    
+        filter->saveToFile(bloom_file);
+    }
+}
+
 int main()
 {
+
+DbCreation();
+CreateBloomValue();
+    
+
+    //const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(ssTable);
+     //std::vector<std::vector<std::string>> ssTables = DBDumper::getSSTableFiles(primaryIndex->getLevelDbPtr(), primaryIndex->getIndexFolder());
      
-   DbCreation();
+
  //   FullIndexCreation();
 
  //  RetrieveData();
    //Statistics();
     //findDir();
 
-    Statistics();
+//    Statistics();
 
 
     return 0;

@@ -288,8 +288,8 @@ void DBImpl::RemoveObsoleteFiles() {
   // are therefore safe to delete while allowing other threads to proceed.
   mutex_.Unlock();
 
-  // WM added, removing bloom files
-  for (const std::string& filename : files_to_delete) {
+  // WMac added, removing bloom files
+  /*for (const std::string& filename : files_to_delete) {
     std::string tail =
         filename.substr(filename.length() - 4, filename.length());
     if (tail == ".ldb") {
@@ -298,9 +298,9 @@ void DBImpl::RemoveObsoleteFiles() {
       std::string sf = std::to_string(g) + ".bloom";
       env_->RemoveFile(dbname_ + "/" + sf);
     }
-  }
+  }*/
 
-  // WM end
+  // WMac end
 
   for (const std::string& filename : files_to_delete) {
     env_->RemoveFile(dbname_ + "/" + filename);
@@ -940,11 +940,11 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   bool has_current_user_key = false;
   SequenceNumber last_sequence_for_key = kMaxSequenceNumber;
 
-  // WM : added
+  // WMac : added
   bloom_valueWM* filter;
   std::string bloom_file;
 
-  // WM : end
+  // WMac : end
 
   while (input->Valid() && !shutting_down_.load(std::memory_order_acquire)) {
     // Prioritize immutable compaction work
@@ -1019,13 +1019,13 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       if (compact->builder == nullptr) {
         status = OpenCompactionOutputFile(compact);
 
-        // WM : added
-        bloom_file =
+        // WMac : added
+        /*bloom_file =
             dbname_ + "/" + std::to_string(file_numberForBloom) + ".bloom";
         filter = new bloom_valueWM();
-        filter->createFile(bloom_file);
+        filter->createFile(bloom_file); */
 
-        // WM : end
+        // WMac : end
 
         if (!status.ok()) {
           break;
@@ -1037,23 +1037,22 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       compact->current_output()->largest.DecodeFrom(key);
       compact->builder->Add(key, input->value());
 
-      // WM : added
-      std::string val = input->value().ToString();
+      // WMac : added
+      /*std::string val = input->value().ToString();
       if (val == "Value187719") {
         std::cout << "Value" << val << std::endl;
       }
-      // std::cout << "Value" << val << std::endl;
-      filter->insert(input->value().ToString());
-      // WM : end
+      filter->insert(input->value().ToString());*/
+      // WMac : end
 
       // Close output file if it is big enough
       if (compact->builder->FileSize() >=
           compact->compaction->MaxOutputFileSize()) {
         status = FinishCompactionOutputFile(compact, input);
 
-        // WM : added
-        filter->saveToFile(bloom_file);
-        // WM : end
+        // WMac : added
+        /*filter->saveToFile(bloom_file); */
+        // WMac : end
         if (!status.ok()) {
           break;
         }
