@@ -22,7 +22,7 @@
 #include "tree.hpp"
 
 
-std::string dbname = "BigDB100mln";
+std::string dbname = "BigDB";
 std::string dbnameDest = "BigDB100mlnvvvv";
 
 tree treeHierarchy;
@@ -68,7 +68,7 @@ void FullIndexCreation() {
 
 void DbCreation() {
     const int num = 1;
-    const int num1 = 20000000;
+    const int num1 = 5000000;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -333,7 +333,7 @@ void CreateBloomValue(){
 int main()
 {
 
-    DbCreation();
+   // DbCreation();
     CreateBloomValue();
 
     std::string valuetofind = "Value187719";
@@ -345,10 +345,7 @@ int main()
    CreateHierarchy();
    CheckInHierarchy(valuetofind);
 
-    //const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(ssTable);
-     //std::vector<std::vector<std::string>> ssTables = DBDumper::getSSTableFiles(primaryIndex->getLevelDbPtr(), primaryIndex->getIndexFolder());
-     
-
+ 
  //   FullIndexCreation();
 
  //  RetrieveData();
