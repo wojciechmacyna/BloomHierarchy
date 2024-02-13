@@ -6,13 +6,17 @@
 #include <string>
 #include <vector>
 
+
 class bloom_value {
  private:
 
-  std::bitset<2000000> bitArray;  // Example size
+  
   int numHashFunctions=3;
 
  public:
+
+  std::bitset<2000000> bitArray;  
+
   bloom_value() {}
   void insert(const std::string& key);
   void saveToFile(const std::string& filename);

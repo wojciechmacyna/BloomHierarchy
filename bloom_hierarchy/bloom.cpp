@@ -19,10 +19,13 @@
 
 #include "dbDumper.hpp"
 #include "bloom_value.hpp"
+#include "tree.hpp"
 
 
 std::string dbname = "BigDB100mln";
 std::string dbnameDest = "BigDB100mlnvvvv";
+
+tree treeHierarchy;
 
 
 static const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -65,7 +68,7 @@ void FullIndexCreation() {
 
 void DbCreation() {
     const int num = 1;
-    const int num1 = 50000000;
+    const int num1 = 20000000;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -111,7 +114,7 @@ void RetrieveData() {
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::cout << document << "Time duration (ms)" << millisec_after - millisec_before;
+    std::cout << document << "Time duration (ms)" << (millisec_after - millisec_before)/1000000;
 
     delete db;
 }
@@ -184,6 +187,8 @@ void RetrieveFromSStable(std::string file, std::string find_value){
 
 }
 
+
+
 void ScanningWithoutBloom(std::string valuetofind) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -206,16 +211,9 @@ void ScanningWithoutBloom(std::string valuetofind) {
 }
 
 
+void ScanningInBloomFiles(std::vector<std::string> bloomfiles, std::string valuetofind) {
 
-void ScanningWithBloom(std::string valuetofind) {
-
-    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-
-    std::string directory = "../out/" + dbname;
-    std::string extension = ".bloom";
-
-    std::vector<std::string> files = listFilesWithExtension(directory, extension);
-    for (const auto& file : files) {
+    for (const auto& file : bloomfiles) {
         
         std::string filePath = file;
         bloom_value filter = filter.loadFromFile(filePath);
@@ -226,13 +224,82 @@ void ScanningWithBloom(std::string valuetofind) {
             RetrieveFromSStable(datafile, valuetofind);
         }      
     }
+}
 
-    
+
+void ScanningWithBloom(std::string valuetofind){
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".bloom";
+    std::vector<std::string> files = listFilesWithExtension(directory, extension);
+    ScanningInBloomFiles(files, valuetofind);
+
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-
     std::cout << "Scanning with bloom  (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
 
 }
+
+
+void CreateHierarchy() {
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".bloom";
+
+    treeHierarchy.createTree();
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout << "Creating hierarchy  (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
+
+}
+
+
+void CreateLeafHierarchyLevel() {
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".bloom";
+
+    std::vector<std::string> files = listFilesWithExtension(directory, extension);
+    for (const auto& file : files) {
+        
+        //std::string filePath = file;
+        bloom_value filter = filter.loadFromFile(file);
+        treeHierarchy.createLeafLevel(filter, file);
+          
+    }
+  
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout << "Creating leaf level  (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
+
+}
+
+
+void CheckInHierarchy(std::string valuetofind) {
+
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    std::string directory = "../out/" + dbname;
+    std::string extension = ".bloom";
+
+    std::vector<std::string> bloomFiles = treeHierarchy.checkExistance(valuetofind);
+
+    if (bloomFiles.empty()){
+        std::cout << "Value not found in bloom" << std::endl;
+    }
+    else{
+        ScanningInBloomFiles(bloomFiles, valuetofind);
+
+    }
+
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout << "Checking in hierarchy  (ms)" << (millisec_after - millisec_before)/1000000 << std::endl;
+
+}
+
 
 void CreateBloomValue(){
 
@@ -257,6 +324,9 @@ void CreateBloomValue(){
              filter->insert(newValue);
         }    
         filter->saveToFile(bloom_file);
+
+        //TO DO: Add to hierarchy into leaf level
+
     }
 }
 
@@ -270,6 +340,10 @@ int main()
     ScanningWithBloom(valuetofind);   
 
    ScanningWithoutBloom(valuetofind);   
+
+   CreateLeafHierarchyLevel();
+   CreateHierarchy();
+   CheckInHierarchy(valuetofind);
 
     //const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(ssTable);
      //std::vector<std::vector<std::string>> ssTables = DBDumper::getSSTableFiles(primaryIndex->getLevelDbPtr(), primaryIndex->getIndexFolder());
