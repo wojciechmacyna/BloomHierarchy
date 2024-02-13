@@ -32,12 +32,9 @@ private:
 
     static const std::string fileFormatStr;
 
-    static std::vector<std::string> stringTokenize(const std::string& str, const std::string& delimiter) noexcept(true);
-    static std::string getFileName(const std::string& baseFileName, const std::string& directoryPath) noexcept(true);
-
 public:
     // [1][2] -> 3rd file in 2nd level (level and files counted from 0)
-    static std::vector<std::vector<std::string>> getSSTableFiles(leveldb::DB* db, const std::string& directoryPath) noexcept(true);
+    //static std::vector<std::vector<std::string>> getSSTableFiles(leveldb::DB* db, const std::string& directoryPath) noexcept(true);
     static std::vector<DBRecord> dumpSSTable(const std::string& ssTablePath) noexcept(true);
 };
 

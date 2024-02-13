@@ -1,8 +1,6 @@
 #ifndef DB_RECORD_HPP
 #define DB_RECORD_HPP
 
-//#include <logger.hpp>
-
 #include "leveldb/db.h"
 
 #include <string>
@@ -52,20 +50,7 @@ public :
         return getKeySize() + getValSize();
     }
 
-    void swapPrimaryKeyWithSecondaryKey() noexcept(true)
-    {
-        // we need to swap 8 first chars from val (secondary key) with key
-        std::string newKey = valData.substr(0, 8);
-        std::string newValue = keyData + valData.substr(8);
-
- //       LOGGER_LOG_TRACE("Swapped Record ({}, {}) into Record ({}, {})", keyData, valData, newKey, newValue);
-
-        keyData = newKey;
-        valData = newValue;
-        key = leveldb::Slice(keyData);
-        val = leveldb::Slice(valData);
-    }
-
+   
     DBRecord(const DBRecord& other) noexcept(true)
     : DBRecord(other.getKey(), other.getVal())
     {

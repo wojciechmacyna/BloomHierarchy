@@ -1,6 +1,6 @@
-#include "treenode.hpp"
+#include "node.hpp"
 
-void treenode::addchildren(int i, int ratio, std::vector<treenode*> nodes){
+void node::addchildren(int i, int ratio, std::vector<node*> nodes){
     int j=i;
 
     int size = static_cast<int>(nodes.size());

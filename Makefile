@@ -18,16 +18,8 @@ SRCS := $(wildcard $(SRC_DIR)/*.cpp)
 HDRS := $(wildcard $(INC_DIR)/*.hpp)
 
 all: mybloom
-mybloom : $(SRC_DIR)/bloom.cpp
-	$(CC) $(SRC_DIR)/bloom.cpp $(SRC_DIR)/dbDumper.cpp $(SRC_DIR)/bloom_value.cpp $(SRC_DIR)/treenode.cpp $(SRC_DIR)/tree.cpp $(C_FLAGS) $(LIBS) -o $(OUT_DIR)/main $(INCLUDE) $(LIB_PATH)
- #   $(CC) $(SRCS) $(C_FLAGS) $(LIBS) -o $(OUT_DIR)/main $(INCLUDE) $(LIB_PATH)
-
-#all:
-#	@$(MAKE) app --no-print-directory
-
-#.PHONY: app
-#app: $(SRCS) $(HDRS)
-#	$(CC) $(SRCS) $(C_FLAGS) -o $(APP_NAME)
+mybloom : $(SRC_DIR)/app.cpp
+	$(CC) $(SRC_DIR)/app.cpp $(SRC_DIR)/dbDumper.cpp $(SRC_DIR)/bloom_value.cpp $(SRC_DIR)/node.cpp $(SRC_DIR)/bloomTree.cpp $(C_FLAGS) $(LIBS) -o $(OUT_DIR)/main $(INCLUDE) $(LIB_PATH)
 
 
 clean:
