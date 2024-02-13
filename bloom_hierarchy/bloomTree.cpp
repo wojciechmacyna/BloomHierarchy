@@ -21,7 +21,7 @@ void bloomTree::checkExistance(node* n, std::string value){
     }
     else{
         if (n->blValue.exists(value)){
-        std::cout << "Checked in: " << n->filename << std::endl;
+        //std::cout << "Checked in: " << n->filename << std::endl;
             for (node* child : n->children) {
                 checkExistance(child, value);
             }
