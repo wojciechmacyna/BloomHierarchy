@@ -1,5 +1,9 @@
 #include "bloomTree.hpp"
 
+bloomTree::bloomTree(int ratio){
+    this->ratio = ratio;
+}
+
 void bloomTree::createLeafLevel(bloom_value bv, std::string filename){
 
     node *tn = new node(bv, filename);
@@ -32,6 +36,7 @@ void bloomTree::checkExistance(node* n, std::string value){
 
 
 void bloomTree::createTree(){
+
     createLevel(leafnodes);
     //traverse(root);
 }

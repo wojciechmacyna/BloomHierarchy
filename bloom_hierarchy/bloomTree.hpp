@@ -8,7 +8,7 @@
 class bloomTree {
  
  private: 
-    int ratio=5;
+    int ratio;
     node *root;
     std::vector<node*> leafnodes;
     void createLevel(std::vector<node*> nodes);
@@ -17,6 +17,7 @@ class bloomTree {
    
  
  public:
+    bloomTree(int ratio);
     std::vector<std::string> bloomNames;
     void createLeafLevel(bloom_value bv, std::string filename);
     void createTree();

@@ -17,10 +17,13 @@
 #include "leveldb/filter_policy.h"
 #include "leveldb/bloom_valueWM.h"
 
-#include "dbDumper.hpp"
-#include "bloom_value.hpp"
-#include "bloomTree.hpp"
+#include "bloom_hierarchy/dbDumper.hpp"
+#include "bloom_hierarchy/bloom_value.hpp"
+#include "bloom_hierarchy/bloomTree.hpp"
 
+#include "bloom_hierarchy/dbOperation.hpp"
+
+/*
 std::string dbname = "BigDB";
 std::string outDir = "../out/";
 std::string bloomExt = ".bloom";
@@ -42,7 +45,7 @@ std::string randomString(int length) {
 
 void DbCreation() {
     const int num = 1;
-    const int num1 = 500000000;
+    const int num1 = 1000000;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -273,7 +276,7 @@ void CreateBloomValue(){
 
     for (const std::string & file : files) {
 
-        bloom_file = transformFileName(file, ".ldb", bloomExt);
+        bloom_file = transformFileName(file, dataExt, bloomExt);
         filter = new bloom_value();
         filter->createFile(bloom_file); 
         const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);
@@ -286,12 +289,28 @@ void CreateBloomValue(){
         filter->saveToFile(bloom_file);
 
     }
+}*/
+
+void Exp1(){
+    std::string valuetofind = "Value187719";
+    std::string dbname = "BigDB";
+    int treeRatio=5;
+    int itemNumber = 50000000;
+    bloomTree *treeHierarchy = new bloomTree(treeRatio);
+    
+    DBOperation::DbCreation(dbname, itemNumber);
+    DBOperation::CreateBloomValue(dbname);
+    DBOperation::ScanningWithBloom(dbname,valuetofind);   
+    DBOperation::ScanningWithoutBloom(dbname,valuetofind);   
+    DBOperation::CreateLeafHierarchyLevel(dbname,treeHierarchy);
+    DBOperation::CreateHierarchy(dbname,treeHierarchy);
+    DBOperation::CheckInHierarchy(treeHierarchy, valuetofind);
 }
 
 int main()
 {
 
-    DbCreation();
+    /*DbCreation();
     CreateBloomValue();
 
     std::string valuetofind = "Value187719";
@@ -301,7 +320,9 @@ int main()
 
     CreateLeafHierarchyLevel();
     CreateHierarchy();
-    CheckInHierarchy(valuetofind);
+    CheckInHierarchy(valuetofind);*/
+
+    Exp1();
 
  
  //   FullIndexCreation();
