@@ -23,9 +23,9 @@ class DBOperation{
         static void DbCreation(std::ofstream& log, std::string dbname, int itemNmb) ;
         static void RetrieveData(std::string dbname);
         static void Statistics(std::string dbname) ;      
-        static void RetrieveFromSStable(std::string file, std::string valueToFind);
+        static int  RetrieveFromSStable(std::string file, std::string valueToFind);
         static void ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind);
-        static void ScanningInBloomFiles(std::vector<std::string> bloomfiles, std::string valuetofind);
+        static void ScanningInBloomFiles(std::ofstream& log,std::vector<std::string> bloomfiles, std::string valuetofind);
         static void ScanningWithBloom(std::ofstream& log, std::string dbname,std::string valuetofind);
         static void CreateHierarchy(std::ofstream& log, std::string dbname, bloomTree* treeHierarchy);
         static void CreateLeafHierarchyLevel(std::ofstream& log,std::string dbname, bloomTree* treeHierarchy);

@@ -143,21 +143,25 @@ std::string DBOperation::transformFileName(std::string filename, std::string fro
 }
 
 
-void DBOperation::RetrieveFromSStable(std::string file, std::string valueToFind){
+int DBOperation::RetrieveFromSStable(std::string file, std::string valueToFind){
  
+    int foundValues=0;
     const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);
     for(DBRecord r : ssTableRecords)
     {           
         std::string newValue = r.valData;
         if (newValue==valueToFind){
             std::cout << "Exists in SSTable : " + file << std::endl;
+            foundValues++;
         }
     }    
+    return foundValues;
 }
 
 void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    int foundInSSTable=0;
 
     //std::string directory = "../out/" + dbname;
     std::string directory = outDir + dbDir + dbname;
@@ -166,8 +170,8 @@ void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, s
     for (const auto& file : files) {
 
         std::string filePath = file;
-        RetrieveFromSStable(file, valuetofind);              
-
+        int nmbOfOccurences = RetrieveFromSStable(file, valuetofind);              
+        foundInSSTable = foundInSSTable+nmbOfOccurences;
     }
 
     
@@ -179,7 +183,10 @@ void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, s
 }
 
 
-void DBOperation::ScanningInBloomFiles(std::vector<std::string> bloomfiles, std::string valuetofind) {
+void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::string> bloomfiles, std::string valuetofind) {
+
+    int foundinLeafBloom=0;
+    int foundInSSTable=0;
 
     for (const auto& file : bloomfiles) {
         
@@ -188,10 +195,14 @@ void DBOperation::ScanningInBloomFiles(std::vector<std::string> bloomfiles, std:
         
         if (filter.exists(valuetofind)) {
             std::cout << "Exists in bloom file : " + file << std::endl;
+            foundinLeafBloom++;
             std::string datafile = transformFileName(file, bloomExt, dataExt);
-            RetrieveFromSStable(datafile, valuetofind);
+            int nmbOfOccurences = RetrieveFromSStable(datafile, valuetofind);
+            foundInSSTable = foundInSSTable+nmbOfOccurences;
         }      
     }
+    log << std::to_string(foundinLeafBloom) <<  "\t" ;
+    log << std::to_string(foundInSSTable) <<  "\t" ;
 }
 
 
@@ -201,7 +212,7 @@ void DBOperation::ScanningWithBloom(std::ofstream& log, std::string dbname, std:
 
     std::string directory = outDir + dbDir + dbname;
     std::vector<std::string> files = listFilesWithExtension(directory, bloomExt);
-    ScanningInBloomFiles(files, valuetofind);
+    ScanningInBloomFiles(log, files, valuetofind);
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
@@ -259,10 +270,13 @@ void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,
         std::cout << "Value not found in bloom" << std::endl;
     }
     else{
-        ScanningInBloomFiles(bloomFiles, valuetofind);
+        ScanningInBloomFiles(log, bloomFiles, valuetofind);
 
     }
 
+    // Getting the number of hierarchy filters
+    int c = treeHierarchy->GetScannedHierarchyFilters();
+    log << std::to_string(c) <<  "\t";
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
     log << std::to_string(msec_diff) <<  std::endl ;

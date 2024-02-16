@@ -17,6 +17,9 @@ std::vector<std::string> bloomTree::checkExistance(std::string value){
     return bloomNames;
 }
 
+int bloomTree::GetScannedHierarchyFilters(){
+    return foundInHierarchy;
+}
 
 void bloomTree::checkExistance(node* n, std::string value){
     
@@ -26,6 +29,7 @@ void bloomTree::checkExistance(node* n, std::string value){
     else{
         if (n->blValue.exists(value)){
         //std::cout << "Checked in: " << n->filename << std::endl;
+            foundInHierarchy++;
             for (node* child : n->children) {
                 checkExistance(child, value);
             }
