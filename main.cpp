@@ -26,13 +26,8 @@
 
 
 
-
-
-
 void MainFlow(std::ofstream& log, std::string dbname, int itemNumber, int treeRatio, std::string valuetofind){
    
-
-
     bloomTree *treeHierarchy = new bloomTree(treeRatio);
 
     //std::string directory = outDir + dbDir + dbname;
@@ -57,15 +52,15 @@ void ExpOne(){
     
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoblScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "InBl" << "\t" << "InSST" << "HCr" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
 
     int treeRatio=5;
     int itemNumber = 1000000;
 
     for(int i=0; i<1; i++)
     {
-        dbname = dbname + std::to_string(i);
-        MainFlow(log, dbname, itemNumber, treeRatio, valuetofind);
+        std::string dbPath = dbname + std::to_string(i);
+        MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
     }
 
     log.close();
@@ -76,36 +71,73 @@ void ExpOne(){
 void ExpTwo(){
 
     std::string folderName = std::string("./expTwo");
-    std::string dbname = "ExTwp";
+    std::string dbname = "ExTwo";
     std::ofstream log;
     std::string valuetofind = "Value187719";
     int itemNumber;
+    std::string dbPath;
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoblScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "HNmb" << "\t" << "HScan"<< std::endl;
 
     int treeRatio=5;
 
-    dbname = dbname + "10mln";
+    dbPath = dbname + "10mln";
     itemNumber = 10000000;
-    MainFlow(log, dbname, itemNumber, treeRatio, valuetofind);
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     
-    dbname = dbname + "50mln";
+    dbPath = dbname + "50mln";
     itemNumber = 50000000;
-    MainFlow(log, dbname, itemNumber, treeRatio, valuetofind);
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
-    dbname = dbname + "100mln";
+    dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    MainFlow(log, dbname, itemNumber, treeRatio, valuetofind);
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
-    dbname = dbname + "500mln";
+    dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    MainFlow(log, dbname, itemNumber, treeRatio, valuetofind);
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     log.close();
 }
+
+
+void ExpThree(){
+
+    std::string folderName = std::string("./expThree");
+    std::string dbname = "ExThree";
+    std::ofstream log;
+    std::string valuetofind = "Value187719";
+    int itemNumber = 100000000;;
+    std::string dbPath;
+    int treeRatio=5;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "HNmb" << "\t" << "HScan"<< std::endl;
+
+    treeRatio=5;
+    dbPath = dbname + "5";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    treeRatio=10;
+    dbPath = dbname + "10";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    treeRatio=15;
+    dbPath = dbname + "15";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    treeRatio=30;
+    dbPath = dbname + "30";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    log.close();
+}
+
+
 
 
 int main()
@@ -124,8 +156,8 @@ int main()
     CheckInHierarchy(valuetofind);*/
 
     //ExpOne();
-    ExpTwo();
-
+    //ExpTwo();
+    ExpThree();
  
  //   FullIndexCreation();
 
