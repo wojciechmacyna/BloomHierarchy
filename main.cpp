@@ -118,9 +118,6 @@ void ExpThree(){
     log.open(logFileName.c_str());
     log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
 
-    treeRatio=2;
-    dbPath = dbname + "2";
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=3;
     dbPath = dbname + "3";
