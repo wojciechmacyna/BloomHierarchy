@@ -79,7 +79,7 @@ void ExpTwo(){
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "HNmb" << "\t" << "HScan"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
 
     int treeRatio=5;
 
@@ -116,7 +116,15 @@ void ExpThree(){
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "HNmb" << "\t" << "HScan"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
+
+    treeRatio=2;
+    dbPath = dbname + "2";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    treeRatio=3;
+    dbPath = dbname + "3";
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=5;
     dbPath = dbname + "5";
@@ -130,8 +138,8 @@ void ExpThree(){
     dbPath = dbname + "15";
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
-    treeRatio=30;
-    dbPath = dbname + "30";
+    treeRatio=20;
+    dbPath = dbname + "20";
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     log.close();
