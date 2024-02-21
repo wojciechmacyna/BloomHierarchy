@@ -14,7 +14,7 @@
 
 #include <dirent.h>
 
-#include "leveldb/db.h"
+//#include "leveldb/db.h"
 #include "leveldb/filter_policy.h"
 #include "leveldb/bloom_valueWM.h"
 
@@ -194,7 +194,7 @@ void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::stri
         bloom_value filter = filter.loadFromFile(filePath);
         
         if (filter.exists(valuetofind)) {
-            std::cout << "Exists in bloom file : " + file << std::endl;
+            //std::cout << "Exists in bloom file : " + file << std::endl;
             foundinLeafBloom++;
             std::string datafile = transformFileName(file, bloomExt, dataExt);
             int nmbOfOccurences = RetrieveFromSStable(datafile, valuetofind);
