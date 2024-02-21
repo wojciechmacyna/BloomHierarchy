@@ -152,12 +152,12 @@ void ExpThree(){
 /*
 The experiment measures the values depending on the bloom size. 
 The bloom size must be changed manually in bloom_value.hpp
-20000, 200000, 2000000
+20000, 200000, 2000000, 1000000
 */
 
 void ExpFour(){
 
-    std::string folderName = std::string("./expFour2000");
+    std::string folderName = std::string("./expFour1000");
     std::string dbname = "ExFour";
     std::ofstream log;
     std::string valuetofind = "Value187719";
