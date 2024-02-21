@@ -227,15 +227,15 @@ void ExpSix(){
     
     dbPath = dbname + "50mln";
     itemNumber = 50000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber);*/
+    DBOperation::DbCreation(log, dbPath, itemNumber);
 
     dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber);
+    DBOperation::DbCreation(log, dbPath, itemNumber);*/
 
-    /* dbPath = dbname + "500mln";
+     dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber); */
+    DBOperation::DbCreation(log, dbPath, itemNumber); 
 
     log.close();
 }
