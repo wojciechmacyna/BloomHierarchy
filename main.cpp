@@ -222,20 +222,20 @@ void ExpSix(){
 
     dbPath = dbname + "10mln";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbname, itemNumber);
+    DBOperation::DbCreation(log, dbPath, itemNumber);
 
     
     dbPath = dbname + "50mln";
     itemNumber = 50000000;
-    DBOperation::DbCreation(log, dbname, itemNumber);
+    DBOperation::DbCreation(log, dbPath, itemNumber);
 
-    dbPath = dbname + "100mln";
+   /* dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    DBOperation::DbCreation(log, dbname, itemNumber);
+    DBOperation::DbCreation(log, dbPath, itemNumber);
 
     dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    DBOperation::DbCreation(log, dbname, itemNumber);
+    DBOperation::DbCreation(log, dbPath, itemNumber); */
 
     log.close();
 }
@@ -248,7 +248,7 @@ int main()
     //ExpThree();
     //ExpFour();
     //ExpFive();
-    ExpSix();
+    //ExpSix();
      return 0;
 }
 
