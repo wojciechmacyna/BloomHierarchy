@@ -390,6 +390,10 @@ port/thread_annotations.h
 cstdint
 -
 
+/home/wojtek/Work/MyLevelDB/leveldb/db/bloom_valueWM.cc
+leveldb/bloom_valueWM.h
+/home/wojtek/Work/MyLevelDB/leveldb/db/leveldb/bloom_valueWM.h
+
 /home/wojtek/Work/MyLevelDB/leveldb/db/db_impl.cc
 db/db_impl.h
 /home/wojtek/Work/MyLevelDB/leveldb/db/db/db_impl.h
