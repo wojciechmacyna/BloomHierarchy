@@ -263,7 +263,6 @@ void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbnam
 void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy, std::string valuetofind) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-
     std::vector<std::string> bloomFiles = treeHierarchy->checkExistance(valuetofind);
 
     if (bloomFiles.empty()){

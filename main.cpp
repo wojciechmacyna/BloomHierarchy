@@ -11,20 +11,13 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-
 #include <dirent.h>
-
-#include "leveldb/db.h"
-#include "leveldb/filter_policy.h"
-#include "leveldb/bloom_valueWM.h"
 
 #include "bloom_hierarchy/dbDumper.hpp"
 #include "bloom_hierarchy/bloom_value.hpp"
 #include "bloom_hierarchy/bloomTree.hpp"
 
 #include "bloom_hierarchy/dbOperation.hpp"
-
-
 
 void MainFlow(std::ofstream& log, std::string dbname, int itemNumber, int treeRatio, std::string valuetofind){
    
@@ -40,9 +33,16 @@ void MainFlow(std::ofstream& log, std::string dbname, int itemNumber, int treeRa
     DBOperation::CreateHierarchy(log, dbname,treeHierarchy);
     DBOperation::CheckInHierarchy(log, treeHierarchy, valuetofind);
 
+    delete treeHierarchy;
+
 }
 
 
+/*
+The experiments measure the avarage values from may iterations 
+of the same process. Just to show if the deviation is high. 
+Probably not used.
+*/
 void ExpOne(){
 
     std::string folderName = std::string("./expOne");
@@ -67,6 +67,9 @@ void ExpOne(){
 }
 
 
+/*
+The experiment measures the values depending on the number of insertions.
+*/
 
 void ExpTwo(){
 
@@ -104,6 +107,9 @@ void ExpTwo(){
 }
 
 
+/*
+The experiment measures the values depending on the number of ration.
+*/
 void ExpThree(){
 
     std::string folderName = std::string("./expThree");
@@ -143,36 +149,41 @@ void ExpThree(){
 }
 
 
+/*
+The experiment measures the values depending on the bloom size. 
+The bloom size must be changed manually in bloom_value.hpp
+20000, 200000, 2000000
+*/
+
+void ExpFour(){
+
+    std::string folderName = std::string("./expFour20");
+    std::string dbname = "ExFour";
+    std::ofstream log;
+    std::string valuetofind = "Value187719";
+    int itemNumber;
+    std::string dbPath;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
+
+    int treeRatio=5;
+ 
+    dbPath = dbname + "50mln";
+    itemNumber = 50000000;
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+
+    log.close();
+}
 
 
 int main()
 {
-
-    /*DbCreation();
-    CreateBloomValue();
-
-    std::string valuetofind = "Value187719";
-    ScanningWithBloom(valuetofind);   
-
-    ScanningWithoutBloom(valuetofind);   
-
-    CreateLeafHierarchyLevel();
-    CreateHierarchy();
-    CheckInHierarchy(valuetofind);*/
-
     //ExpOne();
     //ExpTwo();
-    ExpThree();
- 
- //   FullIndexCreation();
-
- //  RetrieveData();
-   //Statistics();
-    //findDir();
-
-//    Statistics();
-
-
-    return 0;
+    //ExpThree();
+    ExpFour();
+     return 0;
 }
 
