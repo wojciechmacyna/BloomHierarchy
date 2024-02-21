@@ -157,7 +157,7 @@ The bloom size must be changed manually in bloom_value.hpp
 
 void ExpFour(){
 
-    std::string folderName = std::string("./expFour20");
+    std::string folderName = std::string("./expFour200");
     std::string dbname = "ExFour";
     std::ofstream log;
     std::string valuetofind = "Value187719";
