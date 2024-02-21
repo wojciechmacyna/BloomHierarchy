@@ -289,7 +289,7 @@ void DBImpl::RemoveObsoleteFiles() {
   mutex_.Unlock();
 
   // WMac added, removing bloom files
-  /*for (const std::string& filename : files_to_delete) {
+  for (const std::string& filename : files_to_delete) {
     std::string tail =
         filename.substr(filename.length() - 4, filename.length());
     if (tail == ".ldb") {
@@ -298,7 +298,7 @@ void DBImpl::RemoveObsoleteFiles() {
       std::string sf = std::to_string(g) + ".bloom";
       env_->RemoveFile(dbname_ + "/" + sf);
     }
-  }*/
+  }
 
   // WMac end
 
@@ -1020,10 +1020,10 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
         status = OpenCompactionOutputFile(compact);
 
         // WMac : added
-        /*bloom_file =
+        bloom_file =
             dbname_ + "/" + std::to_string(file_numberForBloom) + ".bloom";
         filter = new bloom_valueWM();
-        filter->createFile(bloom_file); */
+        filter->createFile(bloom_file); 
 
         // WMac : end
 
@@ -1038,11 +1038,11 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       compact->builder->Add(key, input->value());
 
       // WMac : added
-      /*std::string val = input->value().ToString();
+      std::string val = input->value().ToString();
       if (val == "Value187719") {
         std::cout << "Value" << val << std::endl;
       }
-      filter->insert(input->value().ToString());*/
+      filter->insert(input->value().ToString());
       // WMac : end
 
       // Close output file if it is big enough
@@ -1051,7 +1051,7 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
         status = FinishCompactionOutputFile(compact, input);
 
         // WMac : added
-        /*filter->saveToFile(bloom_file); */
+        filter->saveToFile(bloom_file); 
         // WMac : end
         if (!status.ok()) {
           break;

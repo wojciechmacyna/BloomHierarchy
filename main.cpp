@@ -178,12 +178,76 @@ void ExpFour(){
 }
 
 
+/*
+The experiments checks the difference between dbCreation with bloom and without it.
+It requires levelDB changing.
+*/
+
+void ExpFive(){
+
+    std::string folderName = std::string("./expFive");
+    std::string dbname = "ExFive";
+    std::ofstream log;
+    std::string valuetofind = "Value187719";
+    int itemNumber;
+    std::string dbPath;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< std::endl;
+ 
+    dbPath = dbname + "1mln";
+    itemNumber = 1000000;
+    DBOperation::DbCreation(log, dbname, itemNumber);
+
+    log.close();
+}
+
+
+
+
+void ExpSix(){
+
+    std::string folderName = std::string("./expSix");
+    std::string dbname = "ExSix";
+    std::ofstream log;
+    std::string valuetofind = "Value187719";
+    int itemNumber;
+    std::string dbPath;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "DBCr" << "\t"  << std::endl;
+
+
+    dbPath = dbname + "10mln";
+    itemNumber = 10000000;
+    DBOperation::DbCreation(log, dbname, itemNumber);
+
+    
+    dbPath = dbname + "50mln";
+    itemNumber = 50000000;
+    DBOperation::DbCreation(log, dbname, itemNumber);
+
+    dbPath = dbname + "100mln";
+    itemNumber = 100000000;
+    DBOperation::DbCreation(log, dbname, itemNumber);
+
+    dbPath = dbname + "500mln";
+    itemNumber = 500000000;
+    DBOperation::DbCreation(log, dbname, itemNumber);
+
+    log.close();
+}
+
+
 int main()
 {
     //ExpOne();
     //ExpTwo();
     //ExpThree();
-    ExpFour();
+    //ExpFour();
+    ExpFive();
      return 0;
 }
 
