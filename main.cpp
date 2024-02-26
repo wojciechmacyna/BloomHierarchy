@@ -152,7 +152,7 @@ void ExpThree(){
 /*
 The experiment measures the values depending on the bloom size. 
 The bloom size must be changed manually in bloom_value.hpp
-20000, 200000, 2000000, 1000000
+20000, 200000,  1000000, 2000000,
 */
 
 void ExpFour(){
@@ -220,7 +220,7 @@ void ExpSix(){
     log << "DBCr" << "\t"  << std::endl;
 
 
-    /* dbPath = dbname + "10mln";
+    dbPath = dbname + "10mln";
     itemNumber = 10000000;
     DBOperation::DbCreation(log, dbPath, itemNumber);
 
@@ -231,7 +231,7 @@ void ExpSix(){
 
     dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber);*/
+    DBOperation::DbCreation(log, dbPath, itemNumber);
 
      dbPath = dbname + "500mln";
     itemNumber = 500000000;
@@ -248,7 +248,7 @@ int main()
     //ExpThree();
     //ExpFour();
     //ExpFive();
-    //ExpSix();
+     ExpSix();
      return 0;
 }
 
