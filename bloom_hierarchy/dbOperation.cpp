@@ -86,7 +86,7 @@ void DBOperation::RetrieveData(std::string dbname, std::string key) {
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::cout << document << "Time duration (ms)" << (millisec_after - millisec_before)/1000000;
+    std::cout << document << "Time duration (micro seconds)" << (millisec_after - millisec_before)/1000  << std::endl; 
 
     delete db;
 }
