@@ -21,7 +21,7 @@ class DBOperation{
 
         static std::string outDir;
         static void DbCreation(std::ofstream& log, std::string dbname, int itemNmb) ;
-        static void RetrieveData(std::string dbname);
+        static void RetrieveData(std::string dbname, std::string key);
         static void Statistics(std::string dbname) ;      
         static int  RetrieveFromSStable(std::string file, std::string valueToFind);
         static void ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind);

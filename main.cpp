@@ -241,6 +241,36 @@ void ExpSix(){
 }
 
 
+
+void ExpSeven(){
+
+    std::string folderName = std::string("./expSeven");
+    std::string dbname = "ExSix";
+    std::ofstream log;
+    std::string keytofind = "Key187719";
+    std::string dbPath;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "Key" << "\t"  << std::endl;
+
+
+    dbPath = dbname + "10mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
+   
+    dbPath = dbname + "50mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
+
+    dbPath = dbname + "100mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
+
+    dbPath = dbname + "500mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
+
+    log.close();
+}
+
+
 int main()
 {
     //ExpOne();
@@ -248,7 +278,8 @@ int main()
     //ExpThree();
     //ExpFour();
     //ExpFive();
-     ExpSix();
+     //ExpSix();
+     ExpSeven();
      return 0;
 }
 

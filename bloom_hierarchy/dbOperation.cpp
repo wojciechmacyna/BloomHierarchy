@@ -70,19 +70,19 @@ void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNum
 }
 
 
-void DBOperation::RetrieveData(std::string dbname) {
+void DBOperation::RetrieveData(std::string dbname, std::string key) {
 
     leveldb::DB* db;
     leveldb::Options options;
     options.create_if_missing = true;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(10);
+   // options.filter_policy = leveldb::NewBloomFilterPolicy(10);
 
     leveldb::Status status = leveldb::DB::Open(options, dbDir + dbname, &db);
     assert(status.ok());
     std::string document;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    db->Get(leveldb::ReadOptions(), "Key 57755", &document);
+    db->Get(leveldb::ReadOptions(), key, &document);
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
