@@ -52,7 +52,7 @@ void ExpOne(){
     
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "InBl" << "\t" << "InSST" << "HCr" << "\t" << "HNmb" << "\t" << "HScan"<< "BlAccess"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "InBl" << "\t" << "InSST" << "HCr" << "\t" << "HNmb" << "\t" << "HScan"<< "\t" << "BlAccess"<< std::endl;
 
     int treeRatio=5;
     int itemNumber = 1000000;
@@ -82,7 +82,7 @@ void ExpTwo(){
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "BlAccess"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "\t" << "BlAccess"<< std::endl;
 
     int treeRatio=5;
 
@@ -108,7 +108,8 @@ void ExpTwo(){
 
 
 /*
-The experiment measures the values depending on the number of ration.
+The experiment measures the values depending on the number of ration for different bloom Size
+The bloom size must be changed manually
 */
 void ExpThree(){
 
@@ -117,13 +118,13 @@ void ExpThree(){
     std::string dbname = "ExThree";
     std::ofstream log;
     std::string valuetofind = "Value187719";
-    int itemNumber = 50000000;;
+    int itemNumber = 100000000;;
     std::string dbPath;
     int treeRatio=5;
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "BlAccess"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "\t" << "BlAccess"<< std::endl;
 
 
     treeRatio=3;
@@ -138,13 +139,13 @@ void ExpThree(){
     dbPath = dbname + "10"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
-    treeRatio=15;
+    /*treeRatio=15;
     dbPath = dbname + "15"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=20;
     dbPath = dbname + "20"+ "_"+ std::to_string(bloomSize);;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);*/
 
     log.close();
 }
@@ -167,7 +168,7 @@ void ExpFour(){
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "BlAccess"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "\t" << "BlAccess"<< std::endl;
 
     int treeRatio=5;
  
@@ -195,7 +196,7 @@ void ExpFive(){
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
-    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "BlAccess"<< std::endl;
+    log << "DBCr" << "\t" << "BlCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" <<"BlScan"<< "\t" << "NoBlScan" << "\t" << "LeafCr" << "\t" << "HCr" << "\t" << "InBl" << "\t" << "InSST" << "\t" << "HNmb" << "\t" << "HScan"<< "\t" << "BlAccess"<< std::endl;
  
     dbPath = dbname + "1mln";
     itemNumber = 1000000;
@@ -203,8 +204,6 @@ void ExpFive(){
 
     log.close();
 }
-
-
 
 
 void ExpSix(){
