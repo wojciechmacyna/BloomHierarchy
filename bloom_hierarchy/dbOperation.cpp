@@ -278,8 +278,11 @@ void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,
     log << std::to_string(c) <<  "\t";
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
-    log << std::to_string(msec_diff) <<  std::endl ;
+    log << std::to_string(msec_diff) <<   "\t" ;
     std::cout << "Checking in hierarchy  (ms)" << msec_diff << std::endl;
+
+    // Getting bloom Accessed
+    log << std::to_string(bloomFiles.size()) <<  std::endl ;
 
 }
 
