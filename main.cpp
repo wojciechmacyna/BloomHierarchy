@@ -112,11 +112,12 @@ The experiment measures the values depending on the number of ration.
 */
 void ExpThree(){
 
-    std::string folderName = std::string("./expThree");
+    int bloomSize = 2000000;
+    std::string folderName = std::string("./expThree"+ std::to_string(bloomSize));
     std::string dbname = "ExThree";
     std::ofstream log;
     std::string valuetofind = "Value187719";
-    int itemNumber = 100000000;;
+    int itemNumber = 50000000;;
     std::string dbPath;
     int treeRatio=5;
 
@@ -126,19 +127,19 @@ void ExpThree(){
 
 
     treeRatio=3;
-    dbPath = dbname + "3";
+    dbPath = dbname + "3"+ "_"+ std::to_string(bloomSize);
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=5;
-    dbPath = dbname + "5";
+    dbPath = dbname + "5"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=10;
-    dbPath = dbname + "10";
+    dbPath = dbname + "10"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=15;
-    dbPath = dbname + "15";
+    dbPath = dbname + "15"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     treeRatio=20;
@@ -275,11 +276,11 @@ int main()
 {
     //ExpOne();
     //ExpTwo();
-    //ExpThree();
+    ExpThree();
     //ExpFour();
     //ExpFive();
      //ExpSix();
-     ExpSeven();
+     //ExpSeven();
      return 0;
 }
 
