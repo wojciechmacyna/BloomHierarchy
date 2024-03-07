@@ -113,7 +113,7 @@ The bloom size must be changed manually
 */
 void ExpThree(){
 
-    int bloomSize = 2000000;
+    int bloomSize = 1000000;
     std::string folderName = std::string("./expThree"+ std::to_string(bloomSize));
     std::string dbname = "ExThree";
     std::ofstream log;
