@@ -15,7 +15,7 @@ class bloom_value {
 
  public:
 
-  std::bitset<500000> bitArray;  
+  std::bitset<2000000> bitArray;  
 
   bloom_value() {}
   void insert(const std::string& key);

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Site BuildName="(empty)"
-	BuildStamp="20240307-0809-Experimental"
+	BuildStamp="20240312-0915-Experimental"
 	Name="(empty)"
 	Generator="ctest-3.16.3"
 	CompilerName=""
 	CompilerVersion=""
 	OSName="Linux"
 	Hostname="DESKTOP-98S186O"
-	OSRelease="5.15.133.1-microsoft-standard-WSL2"
-	OSVersion="#1 SMP Thu Oct 5 21:02:42 UTC 2023"
+	OSRelease="5.15.146.1-microsoft-standard-WSL2"
+	OSVersion="#1 SMP Thu Jan 11 04:09:03 UTC 2024"
 	OSPlatform="x86_64"
 	Is64Bits="1"
 	VendorString="GenuineIntel"
@@ -19,16 +19,16 @@
 	NumberOfLogicalCPU="8"
 	NumberOfPhysicalCPU="4"
 	TotalVirtualMemory="2048"
-	TotalPhysicalMemory="7849"
+	TotalPhysicalMemory="7850"
 	LogicalProcessorsPerPhysical="2"
 	ProcessorClockFrequency="2112.01"
 	>
 	<Testing>
-		<StartDateTime>Mar 07 18:51 CET</StartDateTime>
-		<StartTestTime>1709833909</StartTestTime>
+		<StartDateTime>Mar 12 10:15 CET</StartDateTime>
+		<StartTestTime>1710234929</StartTestTime>
 		<TestList/>
-		<EndDateTime>Mar 07 18:51 CET</EndDateTime>
-		<EndTestTime>1709833909</EndTestTime>
+		<EndDateTime>Mar 12 10:15 CET</EndDateTime>
+		<EndTestTime>1710234929</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

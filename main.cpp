@@ -86,7 +86,7 @@ void ExpTwo(){
 
     int treeRatio=5;
 
-    dbPath = dbname + "10mln";
+    /*dbPath = dbname + "10mln";
     itemNumber = 10000000;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
@@ -101,6 +101,10 @@ void ExpTwo(){
 
     dbPath = dbname + "500mln";
     itemNumber = 500000000;
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);*/
+
+    dbPath = dbname + "1mld";
+    itemNumber = 1000000000;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind);
 
     log.close();
@@ -274,8 +278,10 @@ void ExpSeven(){
 int main()
 {
     //ExpOne();
-    //ExpTwo();
-    ExpThree();
+    // In paper:
+    ExpTwo();
+    // In paper
+    //ExpThree();
     //ExpFour();
     //ExpFive();
      //ExpSix();
