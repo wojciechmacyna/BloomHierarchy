@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include <random>
+
 #include <dirent.h>
 
 //#include "leveldb/db.h"
@@ -38,7 +40,7 @@ std::string DBOperation::randomString(int length) {
     return s;
 }
 
-void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNumber) {
+void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNumber, int percentageRandom) {
     const int num = 1;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -53,13 +55,37 @@ void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNum
     std::string key;
     std::string val;
 
-    for (int i = num; i < itemNumber; i++) {
-        //key = randomString(15) + std::to_string(i);
-        //val = randomString(70) + std::to_string(i);
-        key = "Key" + std::to_string(i);
-        val = "Value" + std::to_string(i);
-        status = db->Put(leveldb::WriteOptions(), key, val);
+    int min=1;
+    int p = itemNumber/100;
+    int max = p*percentageRandom;
+    //long max= (percentageRandom*itemNumber)/100;
+    //int max = 40000000;
+
+     // Create a random number generator
+    std::random_device rd;  // Seed for the random number engine
+    std::mt19937 gen(rd()); // Mersenne Twister engine for generating random numbers
+
+    // Create a distribution in the range [min, max]
+    std::uniform_int_distribution<> distr(min, max);
+
+
+    if (percentageRandom==0){
+            for (int i = num; i < itemNumber; i++) {
+            key = "Key" + std::to_string(i);
+            val = "Value" + std::to_string(i);
+            status = db->Put(leveldb::WriteOptions(), key, val);
+        }
     }
+    else{
+          for (int i = num; i < itemNumber; i++) {
+            key = "Key" + std::to_string(i);
+            int ran = distr(gen);
+            val = "Value" + std::to_string(ran);
+ //            std::cout << "Random number" <<  ran << std::endl;
+            status = db->Put(leveldb::WriteOptions(), key, val);
+        }
+    }
+
 
     delete db;
     
@@ -163,7 +189,6 @@ void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, s
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     int foundInSSTable=0;
 
-    //std::string directory = "../out/" + dbname;
     std::string directory = outDir + dbDir + dbname;
 
     std::vector<std::string> files = listFilesWithExtension(directory, dataExt);

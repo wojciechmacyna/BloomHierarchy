@@ -74,6 +74,17 @@ void bloom_value::createFile(const std::string& filename) {
 }
 
 
+// Checks if at least one element in key[] exists in Bloom filter 
+bool bloom_value::exists(const std::string key[]) const {
+
+  for (size_t i=0; i<key->length(); i++) {
+    if (exists(key[i]))
+      return true;
+  }
+  return false;
+
+}
+
 bool bloom_value::exists(const std::string& key) const {
   // Check if all bits corresponding to the key are set
   for (int i = 0; i < numHashFunctions; ++i) {

@@ -1038,11 +1038,8 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       compact->builder->Add(key, input->value());
 
       // WMac : added
-      /*std::string val = input->value().ToString();
-      if (val == "Value187719") {
-        std::cout << "Value" << val << std::endl;
-      }
-      filter->insert(input->value().ToString());*/
+      //std::string val = input->value().ToString();
+      //filter->insert(input->value().ToString());
       // WMac : end
 
       // Close output file if it is big enough

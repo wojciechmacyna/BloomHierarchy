@@ -26,4 +26,6 @@ class bloom_value {
   bloom_value loadFromFile(const std::string& filename);
 
   bool exists(const std::string& key) const;
+
+  bool exists(const std::string key[]) const;
 };
