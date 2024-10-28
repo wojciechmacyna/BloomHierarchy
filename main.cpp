@@ -122,21 +122,21 @@ void ExpTwo(){
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
     
-    /*dbPath = dbname + "50mln";
+    dbPath = dbname + "50mln";
     itemNumber = 50000000;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);*/
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
-    /*dbPath = dbname + "100mln";
+    dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0); */
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0); 
 
-    /*dbPath = dbname + "500mln";
+    dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);*/
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
-    /*dbPath = dbname + "1mld";
+    dbPath = dbname + "1mld";
     itemNumber = 1000000000;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0); */
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0); 
 
     log.close();
 }
@@ -415,7 +415,7 @@ int main()
     //ExpZero();
     //ExpOne();
     // In paper:
-    //ExpTwo();
+    ExpTwo();
     // In paper
     //ExpThree();
     //ExpFour();
@@ -424,7 +424,7 @@ int main()
     // ExpSeven();
      //ExpEight();
      //ExpNine();
-     ExpTen();
+     //ExpTen();
      return 0;
 }
 
