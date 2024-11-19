@@ -34,7 +34,6 @@ void bloom_value::saveToFile(const std::string& filename) {
 
 bloom_value bloom_value::loadFromFile(const std::string& filename) {
   
-
   std::ifstream file(filename, std::ios::binary);
 
   if (!file) {
@@ -46,8 +45,7 @@ bloom_value bloom_value::loadFromFile(const std::string& filename) {
   file.read(reinterpret_cast<char*>(&numHashFunctions),
             sizeof(numHashFunctions));
 
-  //Bylo 1000
-  // Read the bit array
+   // Read the bit array
   std::vector<char> buffer((bitArray.size() + 7) /
                            8);  // Assuming the same size as saved in saveToFile
   file.read(buffer.data(), buffer.size());

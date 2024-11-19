@@ -26,7 +26,6 @@
 
 static const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-
 std::string DBOperation::outDir = "../out/";
 std::string DBOperation::bloomExt = ".bloom";
 std::string DBOperation::dataExt = ".ldb";

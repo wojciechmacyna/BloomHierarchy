@@ -2,14 +2,11 @@
 
 #include <string>
 #include <vector>
-
 #include "bloomTree.hpp"
 
 class DBOperation{
 
     private:
-
-
         static std::string bloomExt;
         static std::string dataExt;
         static std::string dbDir;
@@ -18,7 +15,6 @@ class DBOperation{
         static std::string transformFileName(std::string filename, std::string from, std::string to);
 
     public:
-
         static std::string outDir;
         static void DbCreation(std::ofstream& log, std::string dbname, int itemNmb, int percentageRandom) ;
         static void RetrieveData(std::string dbname, std::string key);

@@ -40,9 +40,7 @@ void bloomTree::checkExistance(node* n, std::string value){
 
 
 void bloomTree::createTree(){
-
     createLevel(leafnodes);
-    //traverse(root);
 }
 
 void bloomTree::traverse(node* n) {

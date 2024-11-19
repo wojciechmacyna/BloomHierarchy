@@ -66,9 +66,6 @@ void ExpZero(){
 }
 
 
-
-
-
 /*
 The experiments measure the avarage values from may iterations 
 of the same process. Just to show if the deviation is high. 
@@ -174,13 +171,13 @@ void ExpThree(){
     dbPath = dbname + "10"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
-    /*treeRatio=15;
+    treeRatio=15;
     dbPath = dbname + "15"+ "_"+ std::to_string(bloomSize);;
     MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
     treeRatio=20;
     dbPath = dbname + "20"+ "_"+ std::to_string(bloomSize);;
-    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);*/
+    MainFlow(log, dbPath, itemNumber, treeRatio, valuetofind, 0);
 
     log.close();
 }
@@ -267,9 +264,9 @@ void ExpSix(){
     itemNumber = 100000000;
     DBOperation::DbCreation(log, dbPath, itemNumber, 0);
 
-   /*    dbPath = dbname + "500mln";
+    dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 0); */
+    DBOperation::DbCreation(log, dbPath, itemNumber, 0); 
 
     log.close();
 }
@@ -289,17 +286,17 @@ void ExpSeven(){
     log << "Key" << "\t"  << std::endl;
 
 
-   // dbPath = dbname + "10mln";
-   // DBOperation::RetrieveData(dbPath, keytofind);
+    dbPath = dbname + "10mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
    
-   // dbPath = dbname + "50mln";
-  //  DBOperation::RetrieveData(dbPath, keytofind);
+    dbPath = dbname + "50mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
 
     dbPath = dbname + "100mln";
     DBOperation::RetrieveData(dbPath, keytofind);
 
- //   dbPath = dbname + "500mln";
- //   DBOperation::RetrieveData(dbPath, keytofind);
+    dbPath = dbname + "500mln";
+    DBOperation::RetrieveData(dbPath, keytofind);
 
     log.close();
 }
@@ -318,17 +315,17 @@ void ExpEight(){
     log << "Key" << "\t"  << std::endl;
 
 
-//    dbPath = dbname + "10mln";
- //   DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbPath = dbname + "10mln";
+    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
    
-//    dbPath = dbname + "50mln";
- //   DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbPath = dbname + "50mln";
+    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
 
     dbPath = dbname + "100mln";
     DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
 
- //   dbPath = dbname + "500mln";
- //   DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);;
+    dbPath = dbname + "500mln";
+    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
 
     log.close();
 }
@@ -353,14 +350,14 @@ void ExpNine(){
     itemNumber = 10000000;
     DBOperation::DbCreation(log, dbPath, itemNumber, 10);
 
-    /*
+    
     dbPath = dbname + "50Proc";
     itemNumber = 10000000;
     DBOperation::DbCreation(log, dbPath, itemNumber, 50);
 
     dbPath = dbname + "80Porc";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 80);*/
+    DBOperation::DbCreation(log, dbPath, itemNumber, 80);
 
      log.close();
 }
@@ -412,19 +409,19 @@ void ExpTen(){
 
 int main()
 {
-    //ExpZero();
-    //ExpOne();
+    ExpZero();
+    ExpOne();
     // In paper:
     ExpTwo();
     // In paper
-    //ExpThree();
-    //ExpFour();
-    //ExpFive();
-    // ExpSix();
-    // ExpSeven();
-     //ExpEight();
-     //ExpNine();
-     //ExpTen();
+    ExpThree();
+    ExpFour();
+    ExpFive();
+    ExpSix();
+    ExpSeven();
+    ExpEight();
+    ExpNine();
+    ExpTen();
      return 0;
 }
 

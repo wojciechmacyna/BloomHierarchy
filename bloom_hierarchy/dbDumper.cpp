@@ -8,7 +8,6 @@
 const std::string DBDumper::fileFormatStr = std::string(".ldb");
 
 
-
 std::vector<DBRecord> DBDumper::dumpSSTable(const std::string& ssTablePath) noexcept(true)
 {
     DBDumper::DBDumpFileBuffer buffer;

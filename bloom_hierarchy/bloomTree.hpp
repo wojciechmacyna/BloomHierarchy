@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cmath>
-
 #include "node.hpp"
 
 
@@ -16,7 +15,6 @@ class bloomTree {
     void checkExistance(node* node, std::string value);
     int foundInHierarchy=0;
    
- 
  public:
     bloomTree(int ratio);
     std::vector<std::string> bloomNames;

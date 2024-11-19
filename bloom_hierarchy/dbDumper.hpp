@@ -6,7 +6,6 @@
 
 #include "dbRecord.hpp"
 
-
 #include <leveldb/db.h>
 #include <leveldb/dumpfile.h>
 #include <leveldb/status.h>
