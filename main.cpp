@@ -443,7 +443,7 @@ void ExpEleven(){
     log << "DBCr" << "\t" << "BlCr" << "\t"  << "LeafCr" << "\t" << "HCr" << "\t"  << "HScan"<< std::endl;
 
     int treeRatio=5;  
-    int data_size=100;
+    int data_size=1000;
     int itemNumber = 10000000;
     dbPath = dbname + "10mln";
 
