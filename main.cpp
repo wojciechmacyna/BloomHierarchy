@@ -437,6 +437,7 @@ void ExpEleven(){
     std::string dbname = "ExEleven";
     std::ofstream log;
     std::string dbPath;
+    int itemNumber;
 
     const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
     log.open(logFileName.c_str());
@@ -445,15 +446,15 @@ void ExpEleven(){
     int treeRatio=5;  
     int data_size=1000;
 
-    int itemNumber = 10000000;
+    itemNumber = 10000000;
     dbPath = dbname + "10mln";
     MainFlowMultiplyValues(log, dbPath, itemNumber, treeRatio,  0, data_size);
 
-    int itemNumber = 50000000;
+    itemNumber = 50000000;
     dbPath = dbname + "50mln";
     MainFlowMultiplyValues(log, dbPath, itemNumber, treeRatio,  0, data_size);
 
-    int itemNumber = 100000000;
+    itemNumber = 100000000;
     dbPath = dbname + "100mln";
     MainFlowMultiplyValues(log, dbPath, itemNumber, treeRatio,  0, data_size);
 
