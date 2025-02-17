@@ -11,7 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <functional> 
 #include <random>
 
 #include <dirent.h>
@@ -23,6 +23,8 @@
 #include "dbDumper.hpp"
 #include "bloom_value.hpp"
 #include "bloomTree.hpp"
+
+#include "dbThreadPool.hpp"
 
 static const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -48,7 +50,7 @@ void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNum
     leveldb::Options options;
     options.create_if_missing = true;
 
-    leveldb::Status status = leveldb::DB::Open(options, dbDir + dbname, &db);
+    leveldb::Status status = leveldb::DB::Open(options, DBOperation::dbDir + dbname, &db);
     assert(status.ok());
 
     std::string key;
@@ -102,7 +104,7 @@ void DBOperation::RetrieveData(std::string dbname, std::string key) {
     options.create_if_missing = true;
    // options.filter_policy = leveldb::NewBloomFilterPolicy(10);
 
-    leveldb::Status status = leveldb::DB::Open(options, dbDir + dbname, &db);
+    leveldb::Status status = leveldb::DB::Open(options, DBOperation::dbDir + dbname, &db);
     assert(status.ok());
     std::string document;
 
@@ -125,7 +127,7 @@ void DBOperation::Statistics(std::string dbname) {
     options.create_if_missing = true;
     options.filter_policy = leveldb::NewBloomFilterPolicy(10);
 
-    leveldb::Status status = leveldb::DB::Open(options, dbDir + dbname, &db);
+    leveldb::Status status = leveldb::DB::Open(options, DBOperation::dbDir + dbname, &db);
     assert(status.ok());
  
 
@@ -176,7 +178,7 @@ int DBOperation::RetrieveFromSStable(std::string file, std::string valueToFind){
     {           
         std::string newValue = r.valData;
         if (newValue==valueToFind){
-            std::cout << "Exists in SSTable : " + file << std::endl;
+            //std::cout << "Exists in SSTable : " + file << std::endl;
             foundValues++;
         }
     }    
@@ -188,9 +190,9 @@ void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, s
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     int foundInSSTable=0;
 
-    std::string directory = outDir + dbDir + dbname;
+    std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
 
-    std::vector<std::string> files = listFilesWithExtension(directory, dataExt);
+    std::vector<std::string> files = listFilesWithExtension(directory, DBOperation::dataExt);
     for (const auto& file : files) {
 
         std::string filePath = file;
@@ -220,7 +222,7 @@ void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::stri
         if (filter.exists(valuetofind)) {
             //std::cout << "Exists in bloom file : " + file << std::endl;
             foundinLeafBloom++;
-            std::string datafile = transformFileName(file, bloomExt, dataExt);
+            std::string datafile = transformFileName(file, DBOperation::bloomExt, DBOperation::dataExt);
             int nmbOfOccurences = RetrieveFromSStable(datafile, valuetofind);
             foundInSSTable = foundInSSTable+nmbOfOccurences;
         }      
@@ -230,12 +232,27 @@ void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::stri
 }
 
 
+void DBOperation::ScanningInBloomFilesMultiplyValue(std::vector<std::string> bloomfiles, std::string valuetofind) {
+
+    for (const auto& file : bloomfiles) {
+        
+        std::string filePath = file;
+        bloom_value filter = filter.loadFromFile(filePath);
+        
+        if (filter.exists(valuetofind)) {
+            //std::cout << "Exists in bloom file : " + file << std::endl;
+            std::string datafile = transformFileName(file, DBOperation::bloomExt, DBOperation::dataExt);
+            RetrieveFromSStable(datafile, valuetofind);
+        }      
+    }
+}
+
 void DBOperation::ScanningWithBloom(std::ofstream& log, std::string dbname, std::string valuetofind){
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::string directory = outDir + dbDir + dbname;
-    std::vector<std::string> files = listFilesWithExtension(directory, bloomExt);
+    std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
+    std::vector<std::string> files = listFilesWithExtension(directory, DBOperation::bloomExt);
     ScanningInBloomFiles(log, files, valuetofind);
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -250,7 +267,7 @@ void DBOperation::CreateHierarchy(std::ofstream& log,std::string dbname, bloomTr
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::string directory = outDir + dbDir + dbname;
+    std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
 
     treeHierarchy->createTree();
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -265,12 +282,11 @@ void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbnam
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::string directory = outDir + dbDir + dbname;
+    std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
 
-    std::vector<std::string> files = listFilesWithExtension(directory, bloomExt);
+    std::vector<std::string> files = listFilesWithExtension(directory, DBOperation::bloomExt);
     for (const auto& file : files) {
         
-        //std::string filePath = file;
         bloom_value filter = filter.loadFromFile(file);
         treeHierarchy->createLeafLevel(filter, file);
           
@@ -282,6 +298,86 @@ void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbnam
     std::cout << "Creating leaf level  (ms)" << msec_diff << std::endl;
 
 }
+
+std::vector<std::string> DBOperation::CreateMultiplyValue(int itemNmb, int data_size){
+    // Create a random number generator
+        std::random_device rd;  // Seed for the random number engine
+        std::mt19937 gen(rd()); // Mersenne Twister engine for generating random numbers
+
+        // Create a distribution in the range [min, max]
+        std::uniform_int_distribution<> distr(1, itemNmb);
+
+        std::vector<std::string> valuesToFind;
+
+        for (int i=0; i<data_size; i++) {
+            int ran = distr(gen);
+            std::string val = "Value" + std::to_string(ran);
+            valuesToFind.push_back(val);    
+        }
+        return  valuesToFind;
+}
+
+
+void DBOperation::CheckInHierarchyMultiplyValueForThreads(std::ofstream& log, bloomTree* treeHierarchy, int itemNmb, int data_size) 
+{
+
+    std::vector<std::string> valuesToFind = CreateMultiplyValue(itemNmb, data_size);
+    const int num_threads = std::thread::hardware_concurrency();
+    log << "Multivalue for threads" <<  std::endl;
+
+    int threads[] = {1, 2, 4, 8, 16, 32};
+    for (const auto t : threads){
+        if (t<=num_threads){
+            dbThreadPoolInit(t); // max t watkow na AL
+            CheckInHierarchyMultiplyValueForOneThread(log, treeHierarchy, t, valuesToFind);
+        }
+    }  
+}
+
+void DBOperation::CheckInHierarchyMultiplyValueForOneThread(std::ofstream& log, bloomTree* treeHierarchy, int threadNmb, std::vector<std::string> valuesToFind) 
+{
+
+    std::cout << "Number of threads: " << threadNmb << std::endl;
+    int data_size = valuesToFind.size();
+    std::vector<std::future<bool>> futures;
+    auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    auto f1 = [this](const std::vector<std::string>& data, int start, int end, bloomTree* treeHierarchy) -> void
+    {
+        for (int i=start; i<end; i++){
+
+            std::vector<std::string> bloomFiles = treeHierarchy->checkExistanceThread(data[i]);
+
+            if (bloomFiles.empty()){
+                std::cout << "Value not found in bloom" << std::endl;
+            }
+            else{
+                ScanningInBloomFilesMultiplyValue(bloomFiles, data[i]);
+            }
+        }
+    };
+
+    
+    int chunk_size = data_size / threadNmb;
+        for (int i = 0; i < threadNmb; i++) {
+            int start = i * chunk_size;
+            int end = (i == threadNmb - 1) ? data_size : start + chunk_size;
+            futures.push_back(dbThreadPool->threadPool.submit(f1, valuesToFind, start, end, treeHierarchy));
+        }   
+
+    for (auto& task : futures)
+            task.wait();
+     
+
+    auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    auto msec_diff = (millisec_after - millisec_before) / 1000000;
+
+    log << threadNmb <<   "\t";
+    log << std::to_string(msec_diff) <<  std::endl;
+    std::cout << "Checking in hierarchy  (ms)" << msec_diff << std::endl;
+
+}
+
 
 
 void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy, std::string valuetofind) {
@@ -316,15 +412,15 @@ void DBOperation::CreateBloomValue(std::ofstream& log, std::string dbname){
     bloom_value *filter;
     std::string bloom_file;
 
-    std::string directory = outDir + dbDir + dbname;
+    std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-    std::vector<std::string> files = listFilesWithExtension(directory, dataExt);
+    std::vector<std::string> files = listFilesWithExtension(directory, DBOperation::dataExt);
 
     for (const std::string & file : files) {
 
-        bloom_file = transformFileName(file, dataExt, bloomExt);
+        bloom_file = transformFileName(file, DBOperation::dataExt, DBOperation::bloomExt);
         filter = new bloom_value();
         filter->createFile(bloom_file); 
         const std::vector<DBRecord> ssTableRecords = DBDumper::dumpSSTable(file);

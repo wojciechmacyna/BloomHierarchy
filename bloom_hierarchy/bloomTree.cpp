@@ -13,18 +13,54 @@ void bloomTree::createLeafLevel(bloom_value bv, std::string filename){
 }
 
 std::vector<std::string> bloomTree::checkExistance(std::string value){
+   
     checkExistance(root, value);
-    return bloomNames;
+    std::vector<std::string> ret = bloomNames;
+    return ret;
 }
 
 int bloomTree::GetScannedHierarchyFilters(){
     return foundInHierarchy;
 }
 
+
+std::vector<std::string> bloomTree::checkExistanceThread(std::string value){
+   
+    std::vector<std::string> blNames;
+    checkExistanceThread(root, value, blNames);
+    return blNames;
+}
+
+
+void bloomTree::checkExistanceThread(node* n, std::string value, std::vector<std::string>& blNames){
+    
+    // Problem here
+    if (n->filename!="Memory"){
+        //if (n->filename.empty()){
+           blNames.push_back(n->filename);
+        //   std::cout << "empty !!!!!" << std::endl;
+        //}
+    }
+    else{
+        if (n->blValue.exists(value)){
+        //std::cout << "Checked in: " << n->filename << std::endl;
+            for (node* child : n->children) {
+                checkExistanceThread(child, value, blNames);
+            }
+        }
+    }
+        
+}
+
+
 void bloomTree::checkExistance(node* n, std::string value){
     
+    // Problem here
     if (n->filename!="Memory"){
-            bloomNames.push_back(n->filename);
+        //if (n->filename.empty()){
+           bloomNames.push_back(n->filename);
+        //   std::cout << "empty !!!!!" << std::endl;
+        //}
     }
     else{
         if (n->blValue.exists(value)){

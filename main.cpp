@@ -13,24 +13,43 @@
 #include <filesystem>
 #include <dirent.h>
 
+#include "bloom_hierarchy/dbThreadPool.hpp"
+
 #include "bloom_hierarchy/dbDumper.hpp"
 #include "bloom_hierarchy/bloom_value.hpp"
 #include "bloom_hierarchy/bloomTree.hpp"
 
 #include "bloom_hierarchy/dbOperation.hpp"
 
+DBOperation dbOper;
+
+void MainFlowMultiplyValues(std::ofstream& log, std::string dbname, int itemNumber, int treeRatio,  int persentage, int data_size){
+   
+    bloomTree *treeHierarchy = new bloomTree(treeRatio);
+
+    dbOper.DbCreation(log, dbname, itemNumber,persentage);
+    dbOper.CreateBloomValue(log, dbname);
+    dbOper.CreateLeafHierarchyLevel(log, dbname,treeHierarchy);
+    dbOper.CreateHierarchy(log, dbname,treeHierarchy);
+    dbOper.CheckInHierarchyMultiplyValueForThreads(log, treeHierarchy, itemNumber, data_size);
+
+    delete treeHierarchy;
+
+}
+
+
 void MainFlow(std::ofstream& log, std::string dbname, int itemNumber, int treeRatio, std::string valuetofind, int persentage){
    
     bloomTree *treeHierarchy = new bloomTree(treeRatio);
 
  
-    DBOperation::DbCreation(log, dbname, itemNumber,persentage);
-    DBOperation::CreateBloomValue(log, dbname);
-    DBOperation::ScanningWithBloom(log, dbname,valuetofind);   
-    DBOperation::ScanningWithoutBloom(log, dbname,valuetofind);   
-    DBOperation::CreateLeafHierarchyLevel(log, dbname,treeHierarchy);
-    DBOperation::CreateHierarchy(log, dbname,treeHierarchy);
-    DBOperation::CheckInHierarchy(log, treeHierarchy, valuetofind);
+    dbOper.DbCreation(log, dbname, itemNumber,persentage);
+    dbOper.CreateBloomValue(log, dbname);
+    dbOper.ScanningWithBloom(log, dbname,valuetofind);   
+    dbOper.ScanningWithoutBloom(log, dbname,valuetofind);   
+    dbOper.CreateLeafHierarchyLevel(log, dbname,treeHierarchy);
+    dbOper.CreateHierarchy(log, dbname,treeHierarchy);
+    dbOper.CheckInHierarchy(log, treeHierarchy, valuetofind);
 
     delete treeHierarchy;
 
@@ -59,7 +78,7 @@ void ExpZero(){
     for(int i=0; i<5; i++)
     {
         std::string dbPath = dbname + std::to_string(i);
-        DBOperation::DbCreation(log, dbPath, itemNumber, 0);
+        dbOper.DbCreation(log, dbPath, itemNumber, 0);
     }
 
     log.close();
@@ -232,7 +251,7 @@ void ExpFive(){
  
     dbPath = dbname + "1mln";
     itemNumber = 1000000;
-    DBOperation::DbCreation(log, dbname, itemNumber,0);
+    dbOper.DbCreation(log, dbname, itemNumber,0);
 
     log.close();
 }
@@ -253,20 +272,20 @@ void ExpSix(){
 
    dbPath = dbname + "10mln";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 0);
+    dbOper.DbCreation(log, dbPath, itemNumber, 0);
 
  
    dbPath = dbname + "50mln";
     itemNumber = 50000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 0);
+    dbOper.DbCreation(log, dbPath, itemNumber, 0);
 
    dbPath = dbname + "100mln";
     itemNumber = 100000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 0);
+    dbOper.DbCreation(log, dbPath, itemNumber, 0);
 
     dbPath = dbname + "500mln";
     itemNumber = 500000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 0); 
+    dbOper.DbCreation(log, dbPath, itemNumber, 0); 
 
     log.close();
 }
@@ -287,16 +306,16 @@ void ExpSeven(){
 
 
     dbPath = dbname + "10mln";
-    DBOperation::RetrieveData(dbPath, keytofind);
+    dbOper.RetrieveData(dbPath, keytofind);
    
     dbPath = dbname + "50mln";
-    DBOperation::RetrieveData(dbPath, keytofind);
+    dbOper.RetrieveData(dbPath, keytofind);
 
     dbPath = dbname + "100mln";
-    DBOperation::RetrieveData(dbPath, keytofind);
+    dbOper.RetrieveData(dbPath, keytofind);
 
     dbPath = dbname + "500mln";
-    DBOperation::RetrieveData(dbPath, keytofind);
+    dbOper.RetrieveData(dbPath, keytofind);
 
     log.close();
 }
@@ -316,16 +335,16 @@ void ExpEight(){
 
 
     dbPath = dbname + "10mln";
-    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbOper.ScanningWithoutBloom(log, dbPath, keytofind);
    
     dbPath = dbname + "50mln";
-    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbOper.ScanningWithoutBloom(log, dbPath, keytofind);
 
     dbPath = dbname + "100mln";
-    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbOper.ScanningWithoutBloom(log, dbPath, keytofind);
 
     dbPath = dbname + "500mln";
-    DBOperation::ScanningWithoutBloom(log, dbPath, keytofind);
+    dbOper.ScanningWithoutBloom(log, dbPath, keytofind);
 
     log.close();
 }
@@ -348,16 +367,16 @@ void ExpNine(){
 
     dbPath = dbname + "10Proc";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 10);
+    dbOper.DbCreation(log, dbPath, itemNumber, 10);
 
     
     dbPath = dbname + "50Proc";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 50);
+    dbOper.DbCreation(log, dbPath, itemNumber, 50);
 
     dbPath = dbname + "80Porc";
     itemNumber = 10000000;
-    DBOperation::DbCreation(log, dbPath, itemNumber, 80);
+    dbOper.DbCreation(log, dbPath, itemNumber, 80);
 
      log.close();
 }
@@ -407,9 +426,37 @@ void ExpTen(){
     log.close();
 }
 
+
+/*
+The experiment measures multiply value search.
+*/
+
+void ExpEleven(){
+
+    std::string folderName = std::string("./expEleven");
+    std::string dbname = "ExEleven";
+    std::ofstream log;
+    std::string dbPath;
+
+    const std::string logFileName = DBOperation::outDir + folderName+ std::string("_log.txt");
+    log.open(logFileName.c_str());
+    log << "DBCr" << "\t" << "BlCr" << "\t"  << "LeafCr" << "\t" << "HCr" << "\t"  << "HScan"<< std::endl;
+
+    int treeRatio=5;  
+    int data_size=100;
+    int itemNumber = 10000000;
+    dbPath = dbname + "10mln";
+
+    MainFlowMultiplyValues(log, dbPath, itemNumber, treeRatio,  0, data_size);
+
+    log.close();
+}
+
+
+
 int main()
 {
-    ExpZero();
+    /*ExpZero();
     ExpOne();
     // In paper:
     ExpTwo();
@@ -421,7 +468,8 @@ int main()
     ExpSeven();
     ExpEight();
     ExpNine();
-    ExpTen();
+    ExpTen();*/
+    ExpEleven();
      return 0;
 }
 

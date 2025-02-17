@@ -13,6 +13,7 @@ class bloomTree {
     void createLevel(std::vector<node*> nodes);
     void traverse(node* node);
     void checkExistance(node* node, std::string value);
+    void checkExistanceThread(node* n, std::string value, std::vector<std::string>& blNames);
     int foundInHierarchy=0;
    
  public:
@@ -20,6 +21,7 @@ class bloomTree {
     std::vector<std::string> bloomNames;
     void createLeafLevel(bloom_value bv, std::string filename);
     void createTree();
+    std::vector<std::string> checkExistanceThread(std::string value);
     std::vector<std::string> checkExistance(std::string value);
     int GetScannedHierarchyFilters();
 
