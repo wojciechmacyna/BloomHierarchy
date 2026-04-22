@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "bloomTree.hpp"
+#include "test_params.hpp"
 
 class DBOperation{
 
@@ -19,20 +20,20 @@ class DBOperation{
     public:
         static std::string outDir;
 
-        void DbCreation(std::ofstream& log, std::string dbname, int itemNmb, int percentageRandom) ;
+        void DbCreation(std::ofstream& log, std::string dbname, int itemNmb, int percentageRandom, Result& res) ;
         void RetrieveData(std::string dbname, std::string key);
         void Statistics(std::string dbname) ;      
         int  RetrieveFromSStable(std::string file, std::string valueToFind);
-        void ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind);
-        void ScanningInBloomFiles(std::ofstream& log,std::vector<std::string> bloomfiles, std::string valuetofind);
+        void ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind, Result& res);
+        void ScanningInBloomFiles(std::ofstream& log,std::vector<std::string> bloomfiles, std::string valuetofind, Result& res);
         void ScanningInBloomFilesMultiplyValue(std::vector<std::string> bloomfiles, std::string valuetofind);
         void ConTest(std::vector<std::string>& data, int start, int end, bloomTree* treeHierarchy);
-        void ScanningWithBloom(std::ofstream& log, std::string dbname,std::string valuetofind);
-        void CreateHierarchy(std::ofstream& log, std::string dbname, bloomTree* treeHierarchy);
-        void CreateLeafHierarchyLevel(std::ofstream& log,std::string dbname, bloomTree* treeHierarchy);
-        void CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,std::string valuetofind);
+        void ScanningWithBloom(std::ofstream& log, std::string dbname,std::string valuetofind, Result& res);
+        void CreateHierarchy(std::ofstream& log, std::string dbname, bloomTree* treeHierarchy, Result& res);
+        void CreateLeafHierarchyLevel(std::ofstream& log,std::string dbname, bloomTree* treeHierarchy, Result& res);
+        void CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,std::string valuetofind, Result& res);
         void CheckInHierarchyMultiplyValue(std::ofstream& log, bloomTree* treeHierarchy, int itemNmb, int threadNmb);
-        void CreateBloomValue(std::ofstream& log, std::string dbname);
+        void CreateBloomValue(std::ofstream& log, std::string dbname, Result& res);
         void CheckInHierarchyMultiplyValueForThreads(std::ofstream& log, bloomTree* treeHierarchy, int itemNmb, int data_size); 
 
 };

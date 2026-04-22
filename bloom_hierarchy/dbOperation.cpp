@@ -41,7 +41,7 @@ std::string DBOperation::randomString(int length) {
     return s;
 }
 
-void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNumber, int percentageRandom) {
+void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNumber, int percentageRandom, Result& res) {
     const int num = 1;
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -94,6 +94,7 @@ void DBOperation::DbCreation(std::ofstream& log, std::string dbname, int itemNum
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
     std::cout << "DB Creation time (ms)" << msec_diff << std::endl;
     log << std::to_string(msec_diff) <<  "\t" ;
+    res.dbCreationTime=msec_diff;
 }
 
 
@@ -185,7 +186,7 @@ int DBOperation::RetrieveFromSStable(std::string file, std::string valueToFind){
     return foundValues;
 }
 
-void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind) {
+void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, std::string valuetofind, Result& res) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     int foundInSSTable=0;
@@ -206,10 +207,12 @@ void DBOperation::ScanningWithoutBloom(std::ofstream& log, std::string dbname, s
     log << std::to_string(msec_diff) <<  "\t" ;
     std::cout << "Scanning without bloom (ms)" << msec_diff << std::endl;
 
+    res.tScanningWithoutBloom=msec_diff;
+
 }
 
 
-void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::string> bloomfiles, std::string valuetofind) {
+void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::string> bloomfiles, std::string valuetofind, Result& res) {
 
     int foundinLeafBloom=0;
     int foundInSSTable=0;
@@ -229,6 +232,10 @@ void DBOperation::ScanningInBloomFiles(std::ofstream& log, std::vector<std::stri
     }
     log << std::to_string(foundinLeafBloom) <<  "\t" ;
     log << std::to_string(foundInSSTable) <<  "\t" ;
+
+    res.foundInLeafBloom=foundinLeafBloom;
+    res.foundInSSTable=foundInSSTable;
+    
 }
 
 
@@ -247,23 +254,25 @@ void DBOperation::ScanningInBloomFilesMultiplyValue(std::vector<std::string> blo
     }
 }
 
-void DBOperation::ScanningWithBloom(std::ofstream& log, std::string dbname, std::string valuetofind){
+void DBOperation::ScanningWithBloom(std::ofstream& log, std::string dbname, std::string valuetofind, Result& res){
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
     std::string directory = DBOperation::outDir + DBOperation::dbDir + dbname;
     std::vector<std::string> files = listFilesWithExtension(directory, DBOperation::bloomExt);
-    ScanningInBloomFiles(log, files, valuetofind);
+    ScanningInBloomFiles(log, files, valuetofind,  res);
 
     auto millisec_after = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
     log << std::to_string(msec_diff) <<  "\t" ;
     std::cout << "Scanning with bloom  (ms)" << msec_diff << std::endl;
 
+    res.tScanningWithBloom=msec_diff;
+
 }
 
 
-void DBOperation::CreateHierarchy(std::ofstream& log,std::string dbname, bloomTree *treeHierarchy) {
+void DBOperation::CreateHierarchy(std::ofstream& log,std::string dbname, bloomTree *treeHierarchy, Result& res) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -275,10 +284,11 @@ void DBOperation::CreateHierarchy(std::ofstream& log,std::string dbname, bloomTr
     log << std::to_string(msec_diff) <<  "\t" ;
     std::cout << "Creating hierarchy  (ms)" << msec_diff << std::endl;
 
+    res.tCreatingHierarchy=msec_diff;
 }
 
 
-void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbname, bloomTree *treeHierarchy) {
+void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbname, bloomTree *treeHierarchy, Result& res) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -296,6 +306,8 @@ void DBOperation::CreateLeafHierarchyLevel(std::ofstream& log, std::string dbnam
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
     log << std::to_string(msec_diff) <<  "\t" ;
     std::cout << "Creating leaf level  (ms)" << msec_diff << std::endl;
+
+    res.tCreatingLeafLevel=msec_diff;
 
 }
 
@@ -380,7 +392,7 @@ void DBOperation::CheckInHierarchyMultiplyValueForOneThread(std::ofstream& log, 
 
 
 
-void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy, std::string valuetofind) {
+void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy, std::string valuetofind, Result& res) {
 
     auto millisec_before = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     std::vector<std::string> bloomFiles = treeHierarchy->checkExistance(valuetofind);
@@ -389,7 +401,7 @@ void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,
         std::cout << "Value not found in bloom" << std::endl;
     }
     else{
-        ScanningInBloomFiles(log, bloomFiles, valuetofind);
+        ScanningInBloomFiles(log, bloomFiles, valuetofind, res);
 
     }
 
@@ -401,13 +413,18 @@ void DBOperation::CheckInHierarchy(std::ofstream& log, bloomTree* treeHierarchy,
     log << std::to_string(msec_diff) <<   "\t" ;
     std::cout << "Checking in hierarchy  (ms)" << msec_diff << std::endl;
 
+    res.tCheckingInHierarchy=msec_diff;
+    res.hierarchyFilterNumber=c;
+
     // Getting bloom Accessed
     log << std::to_string(bloomFiles.size()) <<  std::endl ;
+
+    res.accessedBloomFilter=bloomFiles.size();
 
 }
 
 
-void DBOperation::CreateBloomValue(std::ofstream& log, std::string dbname){
+void DBOperation::CreateBloomValue(std::ofstream& log, std::string dbname, Result& res){
 
     bloom_value *filter;
     std::string bloom_file;
@@ -438,5 +455,7 @@ void DBOperation::CreateBloomValue(std::ofstream& log, std::string dbname){
     auto msec_diff = (millisec_after - millisec_before) / 1000000;
     log << std::to_string(msec_diff) <<  "\t" ;
     std::cout << "Creating bloom externally  (ms)" << msec_diff << std::endl;
+
+    res.tCreatingBloomExternally=msec_diff;
 
 }

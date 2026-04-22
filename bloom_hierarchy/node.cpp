@@ -1,6 +1,6 @@
 #include "node.hpp"
 
-void node::addchildren(int i, int ratio, std::vector<node*> nodes){
+void Node::addchildren(int i, int ratio, std::vector<Node*> nodes){
     int j=i;
 
     int size = static_cast<int>(nodes.size());

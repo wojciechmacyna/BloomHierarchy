@@ -8,12 +8,12 @@ class bloomTree {
  
  private: 
     int ratio;
-    node *root;
-    std::vector<node*> leafnodes;
-    void createLevel(std::vector<node*> nodes);
-    void traverse(node* node);
-    void checkExistance(node* node, std::string value);
-    void checkExistanceThread(node* n, std::string value, std::vector<std::string>& blNames);
+    Node *root;
+    std::vector<Node*> leafNodes;
+    void createLevel(std::vector<Node*> Nodes);
+    void traverse(Node* Node);
+    void checkExistance(Node* Node, std::string value);
+    void checkExistanceThread(Node* n, std::string value, std::vector<std::string>& blNames);
     int foundInHierarchy=0;
    
  public:

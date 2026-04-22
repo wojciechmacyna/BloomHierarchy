@@ -6,9 +6,9 @@ bloomTree::bloomTree(int ratio){
 
 void bloomTree::createLeafLevel(bloom_value bv, std::string filename){
 
-    node *tn = new node(bv, filename);
-    leafnodes.push_back(tn);    
-    //std::cout << leafnodes.size()<< std::endl;
+    Node *tn = new Node(bv, filename);
+    leafNodes.push_back(tn);    
+    //std::cout << leafNodes.size()<< std::endl;
 
 }
 
@@ -31,8 +31,8 @@ std::vector<std::string> bloomTree::checkExistanceThread(std::string value){
     return blNames;
 }
 
-
-void bloomTree::checkExistanceThread(node* n, std::string value, std::vector<std::string>& blNames){
+// Refactor
+void bloomTree::checkExistanceThread(Node* n, std::string value, std::vector<std::string>& blNames){
     
     // Problem here
     if (n->filename!="Memory"){
@@ -44,7 +44,7 @@ void bloomTree::checkExistanceThread(node* n, std::string value, std::vector<std
     else{
         if (n->blValue.exists(value)){
         //std::cout << "Checked in: " << n->filename << std::endl;
-            for (node* child : n->children) {
+            for (Node* child : n->children) {
                 checkExistanceThread(child, value, blNames);
             }
         }
@@ -53,7 +53,7 @@ void bloomTree::checkExistanceThread(node* n, std::string value, std::vector<std
 }
 
 
-void bloomTree::checkExistance(node* n, std::string value){
+void bloomTree::checkExistance(Node* n, std::string value){
     
     // Problem here
     if (n->filename!="Memory"){
@@ -66,7 +66,7 @@ void bloomTree::checkExistance(node* n, std::string value){
         if (n->blValue.exists(value)){
         //std::cout << "Checked in: " << n->filename << std::endl;
             foundInHierarchy++;
-            for (node* child : n->children) {
+            for (Node* child : n->children) {
                 checkExistance(child, value);
             }
         }
@@ -76,10 +76,10 @@ void bloomTree::checkExistance(node* n, std::string value){
 
 
 void bloomTree::createTree(){
-    createLevel(leafnodes);
+    createLevel(leafNodes);
 }
 
-void bloomTree::traverse(node* n) {
+void bloomTree::traverse(Node* n) {
         if (n == nullptr)
             return;
 
@@ -87,23 +87,23 @@ void bloomTree::traverse(node* n) {
         std::cout << "Bloom Size: " << n->blValue.bitArray.size() << std::endl;
         std::cout << "Number of 0 in Bloom: " << n->blValue.bitArray.size() - n->blValue.bitArray.count() << std::endl;
 
-        for (node* child : n->children) {
+        for (Node* child : n->children) {
             traverse(child);
         }
     }
 
-void bloomTree::createLevel(std::vector<node*> nodes){
+void bloomTree::createLevel(std::vector<Node*> nodes){
 
-    std::vector<node*> levelNodes;
+    std::vector<Node*> levelNodes;
 
     int size = static_cast<int>(nodes.size());
 
     double loop = ceil(size/ratio);
 
     for (int i=0; i<loop+1; i++){
-        node *n = new node();
+        Node *n = new Node();
         n->addchildren(i*ratio, ratio, nodes);
-        for (node* child : n->children) {
+        for (Node* child : n->children) {
             n->blValue.bitArray = n->blValue.bitArray | child->blValue.bitArray;
         }
         levelNodes.push_back(n);

@@ -8,22 +8,22 @@
 
 #include "bloom_value.hpp"
 
-class node {
+class Node {
  public:
 
-    std::vector<node*> children;
+    std::vector<Node*> children;
     bloom_value blValue;
     std::string filename;
 
-    node(bloom_value bv, std::string filename){
+    Node(bloom_value bv, std::string filename){
         this->blValue= bv;
         this->filename=filename;
     }
 
-    node()
+    Node()
     {
        filename="Memory";
     }
 
-    void addchildren(int pos, int ratio, std::vector<node*> nodes);
+    void addchildren(int pos, int ratio, std::vector<Node*> nodes);
 };

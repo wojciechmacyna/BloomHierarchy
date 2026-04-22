@@ -6,7 +6,7 @@ OUT_DIR := ./out
 
 # COMPILER, -fno-rtti for levelbd::Comparator
 CC := g++ -g -Wall
-C_FLAGS := -Wall -Wextra -fno-rtti -std=c++17
+C_FLAGS := -Wall -Wextra -fno-rtti -std=c++17 -lfmt
 
 #LIBRARIES
 LIBS := -lleveldb -lpthread  
@@ -15,8 +15,8 @@ LIB_PATH := -L ./leveldb/build/
 
 APP_NAME := ./main.out
 
-SRCS := $(wildcard $(SRC_DIR)/*.cpp) 
-HDRS := $(wildcard $(INC_DIR)/*.hpp)
+#SRCS := $(wildcard $(SRC_DIR)/*.cpp) 
+#HDRS := $(wildcard $(INC_DIR)/*.hpp)
 
 all: mybloom
 mybloom : main.cpp
