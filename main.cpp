@@ -464,7 +464,7 @@ void ExpNine(){
 
 void writeExp1Headers() {
   writeCsvHeader("exp_10.csv",
-                 "percentage,dbCreationTime,tCreatingBloomExternally,"
+                 "percentage,"
                  "tScanningWithBloom, foundInLeafBloomNoHierarchy, foundInSSTableNoHierarchy"
                  "res.tScanningWithoutBloom,res.tCreatingLeafLevel,res.tCreatingHierarchy"
                  "res.foundInLeafBloomWithHierarchy, res.foundInSSTableWithHierarchy,"
@@ -481,7 +481,7 @@ void writeExp10Content(const std::string& filename, Result& res){
           "ExpBloomMetrics: Nie udało się otworzyć pliku wynikowego!");
       return;
     }
-    out << res.percentage << "," << res.dbCreationTime<< "," << res.tCreatingBloomExternally  << 
+    out << res.percentage << ","  << 
     "," << res.tScanningWithBloom << "," << res.foundInLeafBloomNoHierarchy <<
     "," << res.foundInSSTableNoHierarchy << "," << 
     res.tScanningWithoutBloom << "," << res.tCreatingLeafLevel << "," << res.tCreatingHierarchy
@@ -497,7 +497,7 @@ void ExpTen(){
     std::string dbname = "ExTen";
     std::ofstream log;
     std::string valuetofind = "Value1879";
-    int itemNumber=10000000;
+    int itemNumber=50000000;
     int percentage;
     std::string dbPath;
 
