@@ -612,8 +612,8 @@ int main()
     ExpNine();
     ExpTen();
     ExpEleven();*/
-    //ExpTen();
-    ExpZero();
+    ExpTen();
+    //ExpZero();
      return 0;
 }
 
